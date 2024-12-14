@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {Thread} from '../../models'
 import { convertTimeToMessageHistory } from '../../utils/message-history.ts';
+import { truncateBody } from '../../utils/truncate-body.ts';
 
 export default function ThreadCard(props: Thread) {
     const {title, content, user, likes, views, createdAt} = props
     const tags = []
     const time = convertTimeToMessageHistory(createdAt);
     return (
-        <div className='flex flex-col w-full text-left '>
+        <button className='flex flex-col w-full text-left '>
             <div className='text-xs'>
                 {user.name} 
                 {"  : "}
@@ -27,12 +28,12 @@ export default function ThreadCard(props: Thread) {
                 })}
             </div>
             <div className='text-sm text-gray-500 '>
-                {content}
+                <pre className='pr-24 whitespace-pre-wrap'>{truncateBody(content)}</pre>
             </div>
             <div className='text-sm'>
                 {" ▲ " + likes}{" 👁 " + views}
             </div>
             <hr className='my-4'/>
-        </div>
+        </button>
     )
 }

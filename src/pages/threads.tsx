@@ -9,7 +9,7 @@ import { Thread } from '../models/index.ts';
 
 export default function Threads() {
 
-  const [ThreadList, setThreadList] = React.useState([])
+  const [ThreadList, setThreadList] = React.useState<Thread[]>([])
   const fetchThread = async () => {
     const threads = await threadList()
     
@@ -28,8 +28,12 @@ export default function Threads() {
             <div className='flex flex-col h-full w-full '>
                 <div className='text-3xl font-bold'>THREADS</div>
                 <hr className='my-4'/>
+                <ThreadCreateCard/>
+
                 {
-                  ThreadList.map((thread) => 
+                  ThreadList
+                  .sort((thread1, thread2) => Date.parse(thread2.updatedAt) -  Date.parse(thread1.updatedAt))
+                  .map((thread) => 
                     thread &&
                     <ThreadCard {...(thread as object as Thread)}/>
                   )
