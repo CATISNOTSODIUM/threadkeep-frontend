@@ -1,26 +1,23 @@
 import * as React from 'react';
+import {Thread} from '../../models'
+import { convertTimeToMessageHistory } from '../../utils/message-history.ts';
 
-export default function ThreadCard() {
-    const topic = "Should I major in CS?"
-    const description = "Job market for the tech industry is bad and unpredictable for the future. Is there anyway that majoring in computer science, starting now, still a good idea? I am making a Side Nav in React using tailwind css I have to add border-red color when a particular link is selected. So I am using this approach But this is not working Can anyone help me here"
-    const username = "CAT IS NOT SODIUM"
-    const likes = 10;
-    const views = 20;
-    const comments = 3;
-    const status = "5 hrs ago"
-    const tags = ["RANT", "STUDIES"]
+export default function ThreadCard(props: Thread) {
+    const {title, content, user, likes, views, createdAt} = props
+    const tags = []
+    const time = convertTimeToMessageHistory(createdAt);
     return (
         <div className='flex flex-col w-full text-left '>
             <div className='text-xs'>
-                {username} 
+                {user.name} 
                 {"  : "}
                 <span className='font-bold'>
-                    {status}
+                    {time}
                 </span>
             </div>
             
             <div className='text-xl font-bold'>
-                {topic}
+                {title}
             </div>
             <div className='flex flex-row text-xs gap-2'>
                 {tags.map((tag) => {
@@ -30,10 +27,10 @@ export default function ThreadCard() {
                 })}
             </div>
             <div className='text-sm text-gray-500 '>
-                {description}
+                {content}
             </div>
             <div className='text-sm'>
-                {" ▲ " + likes}{" 👁 " + views}{" 💬 " + comments}
+                {" ▲ " + likes}{" 👁 " + views}
             </div>
             <hr className='my-4'/>
         </div>

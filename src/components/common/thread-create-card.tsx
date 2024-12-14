@@ -1,7 +1,9 @@
 import * as React from 'react';
+import MarkdownHandler from './markdown-editor.tsx';
 
 export default function ThreadCreateCard() {
-    const tags = ["RANT", "STUDIES"]
+    const tags = []
+    const [threadContent, setThreadContent] = React.useState("");
     return (
         <div className='flex flex-col w-full text-left gap-2'>
            
@@ -9,17 +11,11 @@ export default function ThreadCreateCard() {
             <label className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                 CREATE NEW THREAD
             </label>
-            <div className='flex flex-row gap-2 my-2'>
-                <button className='rounded-full px-3 py-1 text-sm bg-slate-300'>Edit</button>
-                <button className='rounded-full px-3 py-1 text-sm bg-slate-100'>Attach files</button>
-                <button className='rounded-full px-3 py-1 text-sm bg-slate-100'>Preview</button>
-                
-            </div>
             <input id="title" className='block p-2.5 w-full text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Title'></input>
-
-            <textarea id="message" className="block resize-none p-2.5 w-full min-h-24 text-sm text-gray-700 bg-gray-50 rounded-lg border " 
-            placeholder="Write your thoughts here...">
-            </textarea>
+            <MarkdownHandler content={threadContent} setContent={setThreadContent}/>
+            <div className='text-xs text-gray-400'>
+                At this stage, only image URLs are allowed.
+            </div>
             <div id="title" className='block p-2.5 w-full text-sm text-gray-700 rounded-lg  flex flex-row gap-2'>
                 <div className="w-fit   rounded-full py-1 ">
                     Add tags:   
