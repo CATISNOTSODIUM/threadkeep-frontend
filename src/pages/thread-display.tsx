@@ -2,16 +2,18 @@ import React from 'react';
 import NavBar from '../components/common/nav-bar.tsx'
 import SideBar from '../components/common/side-bar.tsx'
 import { useSearchParams } from 'react-router-dom';
-import { getThread } from '../api/threads.ts';
-import { Thread, User } from '../models/index.ts';
+import { getComments, getThread } from '../api/threads.ts';
+import { Thread, User, Comment } from '../models/index.ts';
 import { convertTimeToMessageHistory } from '../utils/message-history.ts';
 import MDEditor from '@uiw/react-md-editor';
+import CommentCard from '../components/common/comment-card.tsx';
+import CommentsCreateCard from '../components/common/comment-create-card.tsx';
 
 
 export default function ThreadDisplay() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [thread, setThread] = React.useState<Thread>()
-
+    const [comments, setComments] = React.useState<Comment[]>([])
     const currentUser: User = {
         id: "eba95d09-0daf-42b5-8be9-ce09f9022d7b",
         name: "CAT SODIUM"
@@ -21,7 +23,9 @@ export default function ThreadDisplay() {
         const threadID = searchParams.get('id')
         if (threadID) {
             const thread = await getThread(currentUser, threadID);
+            const  comments = await getComments(currentUser, threadID);
             setThread(thread)
+            setComments(comments)
         }
     }
     React.useEffect(
@@ -63,15 +67,16 @@ export default function ThreadDisplay() {
                     style={{'fontFamily':'"Poppins", sans-serif'}}
                 />
                 <hr className='my-3'/>
-                <div>
-                    <div className='text-sm'>{user?.name} {"  : "}<span className='font-bold'>{time}</span>
-                    <div className='text-base py-4'>Very Informative</div>
-                    <hr className='my-5'/>
-                </div>
-                </div>
-                <button className='text-left w-fit bg-blue-500 text-white px-5 py-2 rounded-full'>
-                    Reply ✉️
-                </button>
+                <div className='font-bold text-xl'>COMMENTS</div>
+                    {comments.length > 0 ?
+                        comments?.map(comment => 
+                        (
+                           <CommentCard {...comment} />
+                        ))
+                        : <div className='text-gray-500 text-sm py-3'>No comments</div>
+                    }
+                
+                <CommentsCreateCard threadID = {id ?? ''}/>
             </div>
             }
             
