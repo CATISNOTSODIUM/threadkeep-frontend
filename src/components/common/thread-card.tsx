@@ -2,13 +2,23 @@ import * as React from 'react';
 import {Thread} from '../../models'
 import { convertTimeToMessageHistory } from '../../utils/message-history.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 export default function ThreadCard(props: Thread) {
-    const {title, content, user, likes, views, createdAt} = props
+    const navigate = useNavigate();
+    const {title, content, id, user, likes, views, createdAt} = props
     const tags = []
     const time = convertTimeToMessageHistory(createdAt);
     return (
-        <button className='flex flex-col w-full text-left '>
+        <button 
+            onClick={() => {navigate({
+                pathname: "/thread-display",
+                search: createSearchParams({
+                    id: id
+                }).toString()
+            })}}
+            className='flex flex-col w-full text-left '
+        >
             <div className='text-xs'>
                 {user.name} 
                 {"  : "}
@@ -30,6 +40,7 @@ export default function ThreadCard(props: Thread) {
             <div className='text-sm text-gray-500 '>
                 <pre className='pr-24 whitespace-pre-wrap'>{truncateBody(content)}</pre>
             </div>
+            
             <div className='text-sm'>
                 {" ▲ " + likes}{" 👁 " + views}
             </div>
