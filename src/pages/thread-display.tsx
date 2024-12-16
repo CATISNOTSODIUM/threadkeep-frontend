@@ -44,7 +44,7 @@ export default function ThreadDisplay() {
             <div className='flex flex-row min-h-screen  mx-12 lg:mx-12 my-24 gap-10'>
             <SideBar/>
             {thread && 
-            <div className='flex flex-col w-full mx-24 lg:mx-48'>  
+            <div className='flex flex-col w-2/3 mx-24 lg:mx-48'>  
                 <div className='flex flex-row'>
                     <div className='w-12 text-center align-center content-center bg-blue-100 text-blue-500 mr-5 rounded-xl'>
                         <div>{likes} ▲</div>
@@ -58,13 +58,13 @@ export default function ThreadDisplay() {
                         <span className='font-bold'>
                             {time}
                         </span>
-                        <div className='text-3xl font-bold'>{title}</div>
+                        <div className='text-3xl w-full font-bold text-wrap'>{title}</div>
                     </div>
                 </div>
                 </div>
                 <MDEditor.Markdown 
                     className='w-full my-5 h-fit' source={content}
-                    style={{'fontFamily':'"Poppins", sans-serif'}}
+                    style={{'fontFamily':'"Nunito", sans-serif'}}
                 />
                 <hr className='my-3'/>
                 <div className='font-bold text-xl'>COMMENTS</div>

@@ -87,7 +87,6 @@ export const createNewComment = async (user: User, threadID: string, content: st
         }).then((res) => res.json())
         .then((data) => data.payload.data)
         .catch((e) => {throw e})
-
         return response
     } catch (error) {
         console.error("Error in retrieving document list", error);
@@ -108,9 +107,13 @@ export const createNewThread = async (user: User, title: string, content: string
                content: content,
                user: user
             }),
-        }).then((res) => res.json())
-        .then((data) => data.payload.data)
-        .catch((e) => {throw e})
+        }).then((res) => {
+            if (res.status === 200) {
+                return true;
+            } else {
+                return false
+            }
+        })
         return response
     } catch (error) {
         console.error("Error in retrieving document list", error);

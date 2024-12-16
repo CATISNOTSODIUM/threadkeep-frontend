@@ -18,6 +18,16 @@ export default function Home() {
             >
                 Let's tag!
             </button>
+            <div>HOT TAGS 🔥🔥</div>
+            <div className='w-96 h-32 p-3 text-center flex flex-row flex-wrap gap-3 overflow-y-scroll'>
+                {
+                    ["General", "Education", "Travel", "Cooking", "Bug fix", "Others"].map(
+                        (tag) => (<div className='h-13 w-28 px-3 cursor-pointer  bg-blue-50  text-gray-600 hover:text-white  hover:bg-gray-500 content-center rounded-full ' key={tag}>
+                            <div>{tag}</div>
+                        </div>)
+                    )
+                }
+            </div>
             <button 
                 className="border-black rounded-full border-2 text-xl px-10 py-2 my-2 min-w-56"
                 onClick={() => navigate("signin")}

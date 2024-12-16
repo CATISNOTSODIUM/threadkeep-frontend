@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
 import NavBar from '../components/common/nav-bar.tsx';
-import { verifyUser } from '../api/users.ts';
+import { createUser } from '../api/users.ts';
 
 
-export default function SignIn() {
+export default function Register() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
-    const handleSignIn = async () => {
+    const handleRegister = async () => {
         setMessage('')
-        const res = await verifyUser(username, password);
-        if (res == false) {
-            setMessage("Invalid request. Invalid username or password")
-        } else {
-            localStorage.setItem("isLogin", "true");
-            localStorage.setItem("userName", res.name);
-            localStorage.setItem("userID", res.id);
+        const res = await createUser(username, password);
+        if (res.status != 200) {
+            setMessage("Invalid request. This username might have already been taken.")
         }
+        console.log(res)
     }
     return (
         <div className="flex flex-col min-h-screen justify-center items-center px-48 gap-2">
             <NavBar/>
-            <div className='text-3xl'>Sign in</div>
+            <div className='text-3xl'>Register</div>
             <input id="username" value={username} onChange={e => setUsername(e.target.value)} className='block p-2.5 w-1/3 text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Username'>
             </input>
             <input id="password" value={password} onChange={e => setPassword(e.target.value)} className='block p-2.5 w-1/3 text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Password (Optional)'>
             </input>
             <div className='text-red-500'>{message}</div>
-            <div className='text-gray-600'>Haven't registered? You can registered <a className="font-bold" href="/register">here</a>.</div>
-            <button className='bg-black px-10 text-white py-2 rounded-xl' onClick={handleSignIn}>SUBMIT</button>
+
+            <button className='bg-black px-10 text-white py-2 rounded-xl' onClick={handleRegister}>SUBMIT</button>
         </div>
     );
 }

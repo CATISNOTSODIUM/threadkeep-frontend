@@ -6,9 +6,11 @@ import { createNewThread } from '../../api/threads.ts';
 export default function ThreadCreateCard() {
     const tags = ["bug fixing"]
     const user: User = {
-        id: "eba95d09-0daf-42b5-8be9-ce09f9022d7b",
-        name: "CAT SODIUM"
+        id: localStorage.getItem("userID") ?? '',
+        name: localStorage.getItem("userName") ?? ''
     }
+
+
     const [isToggle, setIsToggle] = React.useState(false);
     const [threadTitle, setThreadTitle] = React.useState("");
     const [threadContent, setThreadContent] = React.useState("");

@@ -6,14 +6,15 @@ import { createNewComment } from '../../api/threads.ts';
 export default function CommentsCreateCard(props: {threadID: string}) {
     const {threadID} = props;
     const user: User = {
-        id: "eba95d09-0daf-42b5-8be9-ce09f9022d7b",
-        name: "CAT SODIUM"
+        id: localStorage.getItem("userID") ?? '',
+        name: localStorage.getItem("userName") ?? ''
     }
+    
     const [isToggle, setIsToggle] = React.useState(false);
     const [commentsContent, setCommentsContent] = React.useState("");
 
     const onSubmit = async () => {
-        createNewComment(user, threadID, commentsContent)
+        await createNewComment(user, threadID, commentsContent)
         window.location.reload(); 
     }
     return (

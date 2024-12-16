@@ -21,8 +21,8 @@ export default function CommentCard(props: Comment) {
             </div>
             <div className='text-sm py-3'>
                 <MDEditor.Markdown 
-                    className='w-full my-5 h-fit' source={content}
-                    style={{'fontFamily':'"Poppins", sans-serif', 'backgroundColor':'inherit'}}
+                    className='w-full my-1 h-fit' source={content}
+                    style={{'fontFamily':'"Nunito", sans-serif', 'backgroundColor':'inherit'}}
                 />
             </div>
         </div>
