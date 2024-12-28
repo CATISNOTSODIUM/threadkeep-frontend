@@ -110,7 +110,7 @@ function ThreadDisplayHandler() {
                 <div data-color-mode="light">
                 <MDEditor.Markdown 
                     className='w-full my-5 h-fit' source={content}
-                    style={{'fontFamily':'"Nunito", sans-serif'}}
+                    style={{'fontFamily':'"inter", sans-serif'}}
                 />
                 
                 <hr className='my-3'/>

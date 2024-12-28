@@ -15,7 +15,7 @@ export default function CommentCard(props: Comment) {
             name: localStorage.getItem("userName") ?? ''
     }
     return (
-        <div className='flex flex-col text-left bg-yellow-50 hover:bg-yellow-100 rounded-xl  my-3 py-5 px-6'>
+        <div className='flex flex-col text-left bg-gray-50 hover:bg-gray-100 rounded-xl  my-3 py-5 px-6'>
             <div className='text-xs'>
                 {user.name} 
                 {"  : "}
@@ -30,7 +30,7 @@ export default function CommentCard(props: Comment) {
             <div className='text-sm py-3'>
                 <MDEditor.Markdown 
                     className='w-full my-1 h-fit' source={content}
-                    style={{'fontFamily':'"Nunito", sans-serif', 'backgroundColor':'inherit'}}
+                    style={{'fontFamily':'"inter", sans-serif', 'backgroundColor':'inherit'}}
                 />
             </div>
         </div>

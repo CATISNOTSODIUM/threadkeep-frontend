@@ -44,7 +44,7 @@ export default function ThreadCreateCard() {
     return (
         <div className='flex flex-col w-full text-left gap-2 rounded-xl my-1'>
             <button 
-                className="block mb-2 text-base font-bold bg-yellow-200 hover:bg-yellow-300  rounded-full px-5 text-left w-fit py-2 "
+                className="block duration-500 hover:-rotate-1 mb-2 text-base font-bold bg-yellow-200 hover:bg-yellow-300  rounded-full px-5 text-left w-fit py-2 "
                 onClick={() => setIsToggle(!isToggle)}
             >
                 CREATE NEW THREAD
