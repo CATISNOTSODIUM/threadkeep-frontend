@@ -1,10 +1,10 @@
 import * as React from 'react';
-import MarkdownHandler from './markdown-editor.tsx';
+import MarkdownHandler from '../common/markdown-editor.tsx';
 import { Tag, User } from '../../models/index.ts';
 import { createNewThread } from '../../api/threads.ts';
-import MultipleSelectChip from './multiple-select.tsx';
+import MultipleSelectChip from '../common/multiple-select.tsx';
 import { tagList } from '../../api/tags.ts';
-import { Pagination } from './pagination.tsx';
+import { Pagination } from '../common/pagination.tsx';
 
 export default function ThreadCreateCard() {
     const user: User = {
@@ -42,7 +42,7 @@ export default function ThreadCreateCard() {
         fetchTags()
     }, [])
     return (
-        <div className='flex flex-col w-full text-left gap-2 rounded-xl my-1'>
+        <div className='flex flex-col w-full text-left gap-2 rounded-xl my-1 mx-1'>
             <button 
                 className="block duration-500 hover:-rotate-1 mb-2 text-base font-bold bg-yellow-200 hover:bg-yellow-300  rounded-full px-5 text-left w-fit py-2 "
                 onClick={() => setIsToggle(!isToggle)}
@@ -65,7 +65,6 @@ export default function ThreadCreateCard() {
 
             </div>
             <button className='bg-black text-white py-2 rounded-xl' onClick={onSubmit}>CREATE</button>
-            <hr className='my-4'/>
             
             </>}
         </div>

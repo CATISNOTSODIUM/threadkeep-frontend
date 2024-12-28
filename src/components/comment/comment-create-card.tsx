@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MarkdownHandler from './markdown-editor.tsx';
+import MarkdownHandler from '../common/markdown-editor.tsx';
 import { User } from '../../models/index.ts';
 import { createNewComment } from '../../api/threads.ts';
 

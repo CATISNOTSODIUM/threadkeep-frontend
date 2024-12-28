@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Thread, User} from '../../models'
+import {Thread, User} from '../../models/index.ts'
 import { convertTimeToMessageHistory } from '../../utils/message-history.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
 import { createSearchParams, useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ThreadCard from './thread-card.tsx';
+import ThreadCard from '../thread/thread-card.tsx';
 
 
 import {

@@ -1,15 +1,15 @@
 import React, { Suspense } from 'react';
 import NavBar from '../components/common/nav-bar.tsx'
 import SideBar from '../components/common/side-bar.tsx'
-import { useSearchParams } from 'react-router-dom';
-import { getComments, getThread, isLike, reactionThread, ReactionType } from '../api/threads.ts';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { deleteThread, getComments, getThread, isLike, reactionThread, ReactionType } from '../api/threads.ts';
 import { Thread, User, Comment } from '../models/index.ts';
 import { convertTimeToMessageHistory } from '../utils/message-history.ts';
 import MDEditor from '@uiw/react-md-editor';
-import CommentCard from '../components/common/comment-card.tsx';
-import CommentsCreateCard from '../components/common/comment-create-card.tsx';
-import ThreadDisplayCardSkeleton from '../components/common/thread-display-card-skeleton.tsx'
-import { Pagination } from '../components/common/pagniation.tsx';
+import CommentCard from '../components/comment/comment-card.tsx';
+import CommentsCreateCard from '../components/comment/comment-create-card.tsx';
+import ThreadDisplayCardSkeleton from '../components/thread/thread-display-card-skeleton.tsx'
+import ThreadEditModal from '../components/thread/thread-edit.tsx';
 
 
 export default function ThreadDisplay() { // fix: remove
@@ -26,6 +26,7 @@ function ThreadDisplayHandler() {
     const [comments, setComments] = React.useState<Comment[]>([])
     const [currentLike, setCurrentLike] = React.useState(0)
     const [isToggleLike, setIsToggleLike] = React.useState(false) // fix: must fetch from user
+    const [isEditThread, setIsEditThread] = React.useState(false)
     const currentUser: User = {
         id: localStorage.getItem("userID") ?? '',
         name: localStorage.getItem("userName") ?? ''
@@ -51,16 +52,22 @@ function ThreadDisplayHandler() {
     }
     React.useEffect(
         () => {
-            console.log("USE EFFECT")
             window.scrollTo(0, 0);
             fetchThread();
             fetchComments();
             const threadID = searchParams.get('id')
             if (threadID) reactionThread(currentUser, threadID, ReactionType.VIEW)
-        }, []);
+        }, [isEditThread]);
 
     const {title, content, id, user, tags, views, createdAt} = thread ?? {}
     const time = convertTimeToMessageHistory(createdAt);
+
+    const navigate = useNavigate();
+    const handleDeleteThread = async () => {
+        const threadID = searchParams.get('id')
+        if (threadID) await deleteThread(threadID, currentUser)
+        navigate("/threads")
+    }
     return (
         <div>
             
@@ -70,6 +77,7 @@ function ThreadDisplayHandler() {
             {thread && 
             <div className='flex flex-col w-2/3 mx-24 lg:mx-48'>  
                 <div className='flex flex-row content-center'>
+                    {isEditThread && <ThreadEditModal threadProps={thread} setIsToggle={setIsEditThread}/>}
                     <button 
                         className={
                             isToggleLike 
@@ -93,8 +101,8 @@ function ThreadDisplayHandler() {
                             {time}
                         </span>
                         {(user?.name === currentUser.name) && <span>
-                            <button className='text-red-600 ml-3'>✎ Edit </button>
-                            <button className='text-red-600 ml-3'>🗑 Delete </button>
+                            <button className='text-red-600 ml-3' onClick={() => setIsEditThread(true)}>✎ Edit </button>
+                            <button className='text-red-600 ml-3' onClick={handleDeleteThread}>🗑 Delete </button>
                         </span>}
                         <div className='text-3xl w-full font-bold text-wrap'>{title}</div>
                             <div className='flex flex-row text-xs gap-2 font-mono'>
