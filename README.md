@@ -1,46 +1,46 @@
-# Getting Started with Create React App
+# Taggy - A hub for insightful discussions and streamlined data retrieval
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
+While most of the forum discussion platforms available today allow users can engage in conversations by posting messages, sharing information, asking questions, and interacting with others on a variety of topics, retrieving information from the thread can only be done in only one way, retrieving information from the thread can only be done in one way: manually dragging the relevant part from the post and copying it into the clipboard. For instance, for the thread about solving a coding problem, the most relevant information is the code snippet. Imagine users having to retrieve information from multiple threads; manually copying one by one can be tedious.
 
-## Available Scripts
+This project aims to solve this problem by integrating a built-in data retrieval system. Inspired by an online-shopping platform, where users click on products into their shopping carts and pay for them in a single click, this web forum allows users to filter irrelevant information from multiple threads and retrieve the information at once. 
 
-In the project directory, you can run:
+## Objectives
+- To provide an easy to use forum discussion platform.
+- Streamline the process of getting relevant information within forum threads, reducing manual copying and pasting.
 
-### `npm start`
+# Table of contents
+- [Taggy - A hub for insightful discussions and streamlined data retrieval](#taggy---a-hub-for-insightful-discussions-and-streamlined-data-retrieval)
+  - [Introduction](#introduction)
+  - [Objectives](#objectives)
+- [Table of contents](#table-of-contents)
+- [Quick start](#quick-start)
+  - [Building and Running the App Locally](#building-and-running-the-app-locally)
+  - [Deployment](#deployment)
+- [User manual](#user-manual)
+  - [Account Registeration](#account-registeration)
+  - [Posting Threads and Comments](#posting-threads-and-comments)
+  - [Data retrieval system](#data-retrieval-system)
+- [Acknowledgement](#acknowledgement)
+- [License](#license)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Quick start
+## Building and Running the App Locally
+To start a local development server, make sure to install the required dependencies by running `npm install`. Then, you can start the local server by executing `npm start`.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+After you have run the following commands, the development server will be hosted at port 3000 `http://localhost:3000/`. 
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
+todo!
+# User manual
+todo!
+## Account Registeration
+todo!
+## Posting Threads and Comments
+todo!
+## Data retrieval system
+todo!
+# Acknowledgement
+todo!
+# License
+todo!
