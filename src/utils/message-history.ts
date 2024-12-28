@@ -10,7 +10,6 @@ export const convertTimeToMessageHistory = (time) => {
     const hoursDiff = minutesDiff / 60;
     const daysDiff = hoursDiff / 24;
 
-    console.log(secondsDiff, minutesDiff, hoursDiff, daysDiff)
     if (minutesDiff < 1) {
         return `${secondsDiff.toFixed(0)} seconds ago`
     }
