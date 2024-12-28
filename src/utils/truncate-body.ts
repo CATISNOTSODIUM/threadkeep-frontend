@@ -1,4 +1,5 @@
 export const truncateBody = (content: string) => {
+    const maxCharacter = 400;
     // replace markdown headers 
     const markdownHeaderRegex = /^(#{1,6})\s*(.+?)$/gm;
     content = content.replace(markdownHeaderRegex, '$2 >');
@@ -16,5 +17,5 @@ export const truncateBody = (content: string) => {
      // remove unnecessary line breaks
     content = content.replace(/[\r\n]/g, '').replace(/\s+/g, ' ').replace(/ >/g, '>').replace(/> </g, '><').trim()
 
-    return content;
+    return content.slice(0, maxCharacter) + "...";
 }

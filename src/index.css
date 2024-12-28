@@ -16,3 +16,16 @@ code {
     monospace;
 }
 
+
+.Autocomplete {
+  font-family: "Nunito", sans-serif;
+}
+
+.TextField {
+  font-family: "Nunito", sans-serif;
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}

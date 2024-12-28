@@ -1,5 +1,5 @@
 
-const HOST_API = "http://localhost:8000";
+const HOST_API = "http://localhost:5000";
 
 
 export const verifyUser = async (username: string, password: string) => {
@@ -26,7 +26,6 @@ export const verifyUser = async (username: string, password: string) => {
         return response
     } catch (error) {
         console.error("Error in retrieving thread", error);
-        throw error;
     }
 }
 
@@ -46,6 +45,5 @@ export const createUser = async (username: string, password: string) => {
         return response
     } catch (error) {
         console.error("Error in retrieving thread", error);
-        throw error;
     }
 }

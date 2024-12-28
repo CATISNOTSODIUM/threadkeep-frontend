@@ -3,8 +3,8 @@ import MarkdownHandler from './markdown-editor.tsx';
 import { User } from '../../models/index.ts';
 import { createNewComment } from '../../api/threads.ts';
 
-export default function CommentsCreateCard(props: {threadID: string}) {
-    const {threadID} = props;
+export default function CommentsCreateCard(props: {threadID: string, fetchComments: () => Promise<void>}) {
+    const {threadID, fetchComments} = props;
     const user: User = {
         id: localStorage.getItem("userID") ?? '',
         name: localStorage.getItem("userName") ?? ''
@@ -15,12 +15,13 @@ export default function CommentsCreateCard(props: {threadID: string}) {
 
     const onSubmit = async () => {
         await createNewComment(user, threadID, commentsContent)
-        window.location.reload(); 
+        await fetchComments()
+        setIsToggle(false)
     }
     return (
         <div className='flex flex-col w-full text-left gap-2 duration-200'>
             <button 
-                className="block mb-2 text-base bg-blue-500 hover:bg-blue-600 text-white rounded-full px-5 text-left w-fit py-2 "
+                className="block mb-2 text-base bg-yellow-300 hover:bg-yellow-400 text-black rounded-full px-5 text-left w-fit py-2 "
                 onClick={() => setIsToggle(!isToggle)}
             >
                 Reply ✉️

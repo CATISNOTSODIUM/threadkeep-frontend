@@ -3,6 +3,7 @@ export interface Thread {
     title: string,
     content: string,
     user: User,
+    tags: Tag[],
     likes: number,
     views: number,
     createdAt: string,
@@ -19,6 +20,11 @@ export interface Comment {
     updatedAt: string 
 }
 export interface User {
+    name: string,
+    id: string
+}
+
+export interface Tag {
     name: string,
     id: string
 }
