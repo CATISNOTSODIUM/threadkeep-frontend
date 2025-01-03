@@ -28,7 +28,7 @@ export default function SignIn() {
             <div className='text-3xl'>Sign in</div>
             <input id="username" value={username} onChange={e => setUsername(e.target.value)} className='block p-2.5 w-1/3  text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Username'>
             </input>
-            <input id="password" value={password} onChange={e => setPassword(e.target.value)} className='block p-2.5 w-1/3 text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Password (Optional)'>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className='block p-2.5 w-1/3 text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Password (Optional)'>
             </input>
             <div className='text-red-500'>{message}</div>
             <div className='text-gray-600'>Haven't registered? You can registered <a className="font-bold" href="/register">here</a>.</div>

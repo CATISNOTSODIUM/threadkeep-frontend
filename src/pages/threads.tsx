@@ -20,7 +20,7 @@ export default function Threads() {
   const [filter, setFilter] = React.useState({});
 
   const threadsPerPage = 7;
-  const fetchThread = async (filter={}) => {
+  const fetchThread = async () => {
     const threads = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter)
     setThreadList(threads);
   }
@@ -35,7 +35,7 @@ export default function Threads() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       fetchThread()
       initPagination()
-    }, [pageNumber]
+    }, [pageNumber, filter]
   )
   return (
     <div>
@@ -46,7 +46,7 @@ export default function Threads() {
             <div className='flex flex-col w-full h-[75vh] mt-24'>
                 <div className='text-3xl font-bold'>All Threads</div>
                 <ThreadCreateCard/>
-                <SearchFilterHandler setFilter={setFilter} onSubmit={() => fetchThread(filter)}/>
+                <SearchFilterHandler setFilter={setFilter}/>
                 <hr className='mt-2 mb-4'/>
                 
                   {

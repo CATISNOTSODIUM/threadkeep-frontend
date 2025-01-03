@@ -1,6 +1,4 @@
 import * as React from 'react';
-import ThreadCard from '../thread/thread-card.tsx';
-
 
 import {
   DndContext, 
@@ -24,9 +22,12 @@ import {CSS} from '@dnd-kit/utilities';
 import { Thread } from '../../models/index.ts';
 import { threadList } from '../../api/threads.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
+import { mergeContent, saveMarkdownAsMD, saveMarkdownAsRawText } from '../../utils/save-markdown.ts';
+import PreviewModal from './preview-modal.tsx';
 
 export default function SideBar() {
     const [isToggle, setIsToggle] = React.useState(false);
+    const [isPreviewToggle, setIsPreviewToggle] = React.useState(false);
     const name = localStorage.getItem("userName");
     const userID = localStorage.getItem("userID");
     const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
@@ -35,13 +36,14 @@ export default function SideBar() {
         setThreadList(threads);
     };
 
+    
     React.useEffect(() => {
         fetchThread();
     }, []);
 
     if (!isToggle) {
         return (<button
-            className='opacity-30 hover:opacity-100 fixed top-0 left-0 z-50 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl'
+            className='opacity-30 hover:opacity-100 fixed top-0 left-0 z-40 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl'
             onClick={() => setIsToggle(true)}
         >
             {"⚙️ 🔧"}
@@ -49,7 +51,7 @@ export default function SideBar() {
         )
     } else {
         return (
-        <div className='min-w-64 lg:min-w-96 bg-gray-50  overflow-scroll sticky top-24 h-screen rounded-lg px-4 pb-24 flex flex-col gap-1'>
+        <div className='min-w-64 lg:min-w-96 bg-gray-50  overflow-scroll sticky top-24 h-screen rounded-lg px-4 py-24 flex flex-col gap-1 z-50'>
         <button className='sticky top-0 text-right font-bold text-3xl' onClick={() => setIsToggle(false)}>
                 {"×"}
         </button>
@@ -63,11 +65,23 @@ export default function SideBar() {
             </button>
         </div>
 
-
+        <div className='border-2 p-3 bg-white rounded-xl my-2 flex flex-col'>
+          <div className='font-bold'>FILTER ⛊</div>
+          <div><input type="checkbox" id="isText"></input><label for="isText">{" Text"}</label></div>
+          <div><input type="checkbox" id="isImage"></input><label for="isImage">{" Image"}</label></div>
+          <div><input type="checkbox" id="isCode"></input><label for="isCode">{" Code"}</label></div>
+          <div className='flex flex-row gap-3 justify-between'>
+            <button className='w-full text-center border-2 rounded-xl px-2' onClick={() => setIsPreviewToggle(true)}>Preview</button>
+            <button className='w-full text-center border-2 rounded-xl px-2' onClick={() => saveMarkdownAsMD("output.md", ThreadList)}>MD</button>
+            <button className='w-full text-center border-2 rounded-xl px-2' onClick={() => saveMarkdownAsRawText("output.txt", ThreadList)}>TXT</button>
+          </div>
+        </div>
+        
         <DashboardThread initialThreadList={ThreadList.map((thread) => ({
             "title": thread.title,
             "content": thread.content
         }))}/>
+        {isPreviewToggle && <PreviewModal markdownContent={mergeContent(ThreadList)} setIsToggle={setIsPreviewToggle}/>}
         </div>
         )
     }
@@ -82,7 +96,7 @@ function DashboardThread({initialThreadList: initialThreadList}) {
     })
   );
 
-  const [ThreadList, setThreadList] = React.useState(initialThreadList);
+  const [ThreadList, setThreadList] = React.useState(initialThreadList); // todo: update order
 
   function handleDragEnd(event) {
     const { active, over } = event;

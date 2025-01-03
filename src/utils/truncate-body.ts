@@ -1,14 +1,17 @@
-export const truncateBody = (content: string, maxCharacter = 400) => {
+export const truncateBody = (content: string, maxCharacter = 400, convertCode = true) => {
     if (!content) return content; // undefined content 
     // replace markdown headers 
     const markdownHeaderRegex = /^(#{1,6})\s*(.+?)$/gm;
     content = content.replace(markdownHeaderRegex, '$2 >');
 
     // convert every code snippet into <code>
-    const codeSnippetRegex = /```([\s\S]*?)```/g;
-    content = content.replace(codeSnippetRegex, (_, content) => {
-        return " <code> ";
-    });
+    if (convertCode) {
+        const codeSnippetRegex = /```([\s\S]*?)```/g;
+        content = content.replace(codeSnippetRegex, (_, content) => {
+            return " <code> ";
+        });
+    }
+    
     // convert every image into <img>
     const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g;
     content = content.replace(imageRegex, ' <img> ')

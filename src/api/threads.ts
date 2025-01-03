@@ -7,11 +7,12 @@ const HOST_API = "http://localhost:5000";
 export const threadList = async (skip, max_per_page, filter={}) => {
     let url = `${HOST_API}/threads?skip=${skip}&max_per_page=${max_per_page}`
     const urlName = filter["name"] 
-    if (urlName) url += "&name=" + urlName
+    if (urlName) url += `&name=${urlName}`
     const urlTags = filter["tags"]
-    if (urlTags) url += "&tags=" + filter["tags"].join(',')
+    if (urlTags) url += `&tags=${filter["tags"].join(',')}`
+    console.log(url)
     try {
-        const response = await fetch(`${HOST_API}/threads?skip=${skip}&max_per_page=${max_per_page}`, {
+        const response = await fetch(url, {
             method: "GET"
         }).then((res) => res.json())
         .then((data) => data.payload.data)
