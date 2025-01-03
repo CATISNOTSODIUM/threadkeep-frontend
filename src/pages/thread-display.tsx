@@ -10,9 +10,12 @@ import CommentCard from '../components/comment/comment-card.tsx';
 import CommentsCreateCard from '../components/comment/comment-create-card.tsx';
 import ThreadDisplayCardSkeleton from '../components/thread/thread-display-card-skeleton.tsx'
 import ThreadEditModal from '../components/thread/thread-edit.tsx';
+import { isVerified } from '../utils/isVerified.ts';
 
 
 export default function ThreadDisplay() { // fix: remove
+    const navigate = useNavigate();
+    if (!isVerified()) navigate("/signin");
     return (
         <Suspense fallback={<ThreadDisplayCardSkeleton/>} >
             <ThreadDisplayHandler/> 
@@ -21,6 +24,7 @@ export default function ThreadDisplay() { // fix: remove
 } 
 // todo: update like when clicked
 function ThreadDisplayHandler() {
+    
     const [searchParams, setSearchParams] = useSearchParams();
     const [thread, setThread] = React.useState<Thread>()
     const [comments, setComments] = React.useState<Comment[]>([])
@@ -75,7 +79,7 @@ function ThreadDisplayHandler() {
             <div className='flex flex-row min-h-screen  mx-12 lg:mx-12 my-24 gap-10'>
             <SideBar/>
             {thread && 
-            <div className='flex flex-col w-2/3 mx-24 lg:mx-48'>  
+            <div className='flex flex-col lg:w-2/3 w-full lg:mx-48'>  
                 <div className='flex flex-row content-center'>
                     {isEditThread && <ThreadEditModal threadProps={thread} setIsToggle={setIsEditThread}/>}
                     <button 
@@ -91,7 +95,7 @@ function ThreadDisplayHandler() {
                             setIsToggleLike(!isToggleLike)
                         }}
                     >
-                        <div>{currentLike} ▲</div>
+                        <div>{currentLike} ⬢</div>
                     </button>
                     <div className='flex flex-col'>
                         <div className='text-base'>

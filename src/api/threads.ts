@@ -4,7 +4,12 @@ import { Tag, User } from "../models";
 const HOST_API = "http://localhost:5000";
 
 
-export const threadList = async (skip, max_per_page) => {
+export const threadList = async (skip, max_per_page, filter={}) => {
+    let url = `${HOST_API}/threads?skip=${skip}&max_per_page=${max_per_page}`
+    const urlName = filter["name"] 
+    if (urlName) url += "&name=" + urlName
+    const urlTags = filter["tags"]
+    if (urlTags) url += "&tags=" + filter["tags"].join(',')
     try {
         const response = await fetch(`${HOST_API}/threads?skip=${skip}&max_per_page=${max_per_page}`, {
             method: "GET"
@@ -175,6 +180,7 @@ export const createNewComment = async (user: User, threadID: string, content: st
 }
 
 export const createNewThread = async (user: User, title: string, content: string, tags: Tag[]) => {
+    
     try {
  
         const response = await fetch(`${HOST_API}/threads/create`, {

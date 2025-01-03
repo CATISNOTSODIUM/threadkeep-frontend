@@ -17,9 +17,10 @@ export default function ThreadCreateCard() {
     const [threadContent, setThreadContent] = React.useState("");
     const [selectedTags, setSelectedTags] = React.useState<Tag[]>([])
 
+    // message status
+    const [message, setMessage] = React.useState("At this stage, only image URLs are allowed.")
     const fetchTags = async () => {
         const res = await tagList(); // res is an array
-        console.log(res)
         try {
             const tmp = {}
             res.forEach(tag => {
@@ -33,8 +34,16 @@ export default function ThreadCreateCard() {
         
     }
     const onSubmit = async () => {
+        if (threadTitle.length > 100) {
+            setMessage("Title should not exceed 100 characters.")            
+            return;
+        }
+        if (threadTitle === '' || threadContent === '') {
+            setMessage("Title and content must not be empty.")            
+            return;
+        }
+        
         const res = await createNewThread(user, threadTitle, threadContent, selectedTags.map(tag => tagsDict[tag]))
-        console.log(res)
         window.location.reload(); 
     }
 
@@ -42,7 +51,7 @@ export default function ThreadCreateCard() {
         fetchTags()
     }, [])
     return (
-        <div className='flex flex-col w-full text-left gap-2 rounded-xl my-1 mx-1'>
+        <div className='flex flex-col w-full text-left gap-2 rounded-xl my-1 px-3'>
             <button 
                 className="block duration-500 hover:-rotate-1 mb-2 text-base font-bold bg-yellow-200 hover:bg-yellow-300  rounded-full px-5 text-left w-fit py-2 "
                 onClick={() => setIsToggle(!isToggle)}
@@ -51,20 +60,22 @@ export default function ThreadCreateCard() {
             </button>
            {isToggle &&
            <>
-            <input id="title" value={threadTitle} onChange={e => setThreadTitle(e.target.value)} className='block p-2.5 w-full text-sm text-gray-700 bg-gray-50 rounded-lg border ' placeholder='Title'></input>
+            <input id="title" value={threadTitle} onChange={e => setThreadTitle(e.target.value)} className='block p-2.5 w-full text-sm text-gray-700 bg-gray-50 rounded-lg border ' 
+                placeholder='Title (Max character 100)'>
+            </input>
             <div data-color-mode="light">
                 <MarkdownHandler content={threadContent} setContent={setThreadContent}/>
             </div>
-            <div className='text-xs text-gray-400'>
-                At this stage, only image URLs are allowed.
+            <div className='text-xs text-red-400'>
+                {message}
             </div>
-            <div id="title" className='p-2.5 w-full text-sm text-gray-700 rounded-lg  flex flex-col gap-2'>
+            <div id="title" className='p-2.5 font-mono w-full text-sm text-gray-700 rounded-lg  flex flex-col gap-2 overflow-y-scroll'>
                 <div>
                 <MultipleSelectChip tags={Object.keys(tagsDict)} selectedTag={selectedTags} setSelectedTag={setSelectedTags}/>
                 </div>
 
             </div>
-            <button className='bg-black text-white py-2 rounded-xl' onClick={onSubmit}>CREATE</button>
+            <button className='bg-white border-2 hover:bg-gray-50 text-black py-2 rounded-full' onClick={onSubmit}>Start your discussion 🐝</button>
             
             </>}
         </div>

@@ -20,7 +20,7 @@ export default function ThreadCard(props: Thread) {
             className='focus:cursor-pointer duration-300 hover:-translate-x-1 flex flex-col w-full text-left hover:bg-gray-50 rounded-xl p-5'
         >
             <button className='text-sm bg-gray-200 w-fit px-2 my-1 rounded-xl hover:-translate-x-1 duration-500'>
-                🔖 dashboard
+                💾
             </button>
 
             <div className='text-xs'>
@@ -50,7 +50,7 @@ export default function ThreadCard(props: Thread) {
             </div>
             
             <div className='text-sm text-gray-500 '>
-                <pre className='pr-24 whitespace-pre-wrap font-sans'>{truncateBody(content)}</pre>
+                <div className='pr-24 whitespace-pre-wrap'>{truncateBody(content, 200)}</div>
             </div>
             </button>
             <div className='text-sm'>
