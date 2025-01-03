@@ -1,5 +1,5 @@
-export const truncateBody = (content: string) => {
-    const maxCharacter = 400;
+export const truncateBody = (content: string, maxCharacter = 400) => {
+    if (!content) return content; // undefined content 
     // replace markdown headers 
     const markdownHeaderRegex = /^(#{1,6})\s*(.+?)$/gm;
     content = content.replace(markdownHeaderRegex, '$2 >');

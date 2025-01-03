@@ -1,5 +1,4 @@
-# Taggy - A hub for insightful discussions and streamlined data retrieval
-
+# ThreadKeep ⬢  - Your personal archive for online conversations.
 ## Introduction
 While most of the forum discussion platforms available today allow users can engage in conversations by posting messages, sharing information, asking questions, and interacting with others on a variety of topics, retrieving information from the thread can only be done in only one way, retrieving information from the thread can only be done in one way: manually dragging the relevant part from the post and copying it into the clipboard. For instance, for the thread about solving a coding problem, the most relevant information is the code snippet. Imagine users having to retrieve information from multiple threads; manually copying one by one can be tedious.
 
@@ -10,7 +9,7 @@ This project aims to solve this problem by integrating a built-in data retrieval
 - Streamline the process of getting relevant information within forum threads, reducing manual copying and pasting.
 
 # Table of contents
-- [Taggy - A hub for insightful discussions and streamlined data retrieval](#taggy---a-hub-for-insightful-discussions-and-streamlined-data-retrieval)
+- [ThreadKeep ⬢  - Your personal archive for online conversations.](#threadkeep-----your-personal-archive-for-online-conversations)
   - [Introduction](#introduction)
   - [Objectives](#objectives)
 - [Table of contents](#table-of-contents)

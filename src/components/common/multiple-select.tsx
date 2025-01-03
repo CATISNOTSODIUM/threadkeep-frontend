@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -23,8 +22,6 @@ const MenuProps = {
 
 
 export default function MultipleSelectChip({tags, selectedTag, setSelectedTag}) {
-
-  
   const handleChange = (event: SelectChangeEvent<typeof selectedTag>) => {
     const {
       target: { value },
@@ -35,29 +32,37 @@ export default function MultipleSelectChip({tags, selectedTag, setSelectedTag}) 
   };
 
   React.useEffect(() => {
-
   }, [selectedTag])
   
   return (
-    <div className='flex flex-row gap-4 w-full'>
-      {tags.map(
-          (tag) => (
-            <button 
-              className='font-bold bg-white px-3 rounded-full border-2 border-yellow-300 hover:bg-yellow-300'
-              key={tag} value={tag}
-              onClick={(e) => {
-                const res = [...selectedTag]
-                res.push(e.target.value)
-                setSelectedTag(res)
-                console.log(selectedTag)
-              }}
-            > 
+    <FormControl sx={{ width: "100%" }}>
+        <InputLabel id="demo-multiple-chip-label">Tags</InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          value={selectedTag}
+          onChange={value => handleChange(value)}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {(tags).map((tag) => (
+            <MenuItem
+              key={tag}
+              value={tag}
+            >
               {tag}
-            </button>
-          )
-        )
-      }
-    </div>
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
   );
 }
 

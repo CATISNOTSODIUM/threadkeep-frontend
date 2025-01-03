@@ -1,18 +1,21 @@
 import React, { Suspense } from 'react';
 import NavBar from '../components/common/nav-bar.tsx'
 import SideBar from '../components/common/side-bar.tsx'
-import { useSearchParams } from 'react-router-dom';
-import { getComments, getThread, isLike, reactionThread, ReactionType } from '../api/threads.ts';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { deleteThread, getComments, getThread, isLike, reactionThread, ReactionType } from '../api/threads.ts';
 import { Thread, User, Comment } from '../models/index.ts';
 import { convertTimeToMessageHistory } from '../utils/message-history.ts';
 import MDEditor from '@uiw/react-md-editor';
-import CommentCard from '../components/common/comment-card.tsx';
-import CommentsCreateCard from '../components/common/comment-create-card.tsx';
-import ThreadDisplayCardSkeleton from '../components/common/thread-display-card-skeleton.tsx'
-import { Pagination } from '../components/common/pagniation.tsx';
+import CommentCard from '../components/comment/comment-card.tsx';
+import CommentsCreateCard from '../components/comment/comment-create-card.tsx';
+import ThreadDisplayCardSkeleton from '../components/thread/thread-display-card-skeleton.tsx'
+import ThreadEditModal from '../components/thread/thread-edit.tsx';
+import { isVerified } from '../utils/isVerified.ts';
 
 
 export default function ThreadDisplay() { // fix: remove
+    const navigate = useNavigate();
+    if (!isVerified()) navigate("/signin");
     return (
         <Suspense fallback={<ThreadDisplayCardSkeleton/>} >
             <ThreadDisplayHandler/> 
@@ -21,11 +24,13 @@ export default function ThreadDisplay() { // fix: remove
 } 
 // todo: update like when clicked
 function ThreadDisplayHandler() {
+    
     const [searchParams, setSearchParams] = useSearchParams();
     const [thread, setThread] = React.useState<Thread>()
     const [comments, setComments] = React.useState<Comment[]>([])
     const [currentLike, setCurrentLike] = React.useState(0)
     const [isToggleLike, setIsToggleLike] = React.useState(false) // fix: must fetch from user
+    const [isEditThread, setIsEditThread] = React.useState(false)
     const currentUser: User = {
         id: localStorage.getItem("userID") ?? '',
         name: localStorage.getItem("userName") ?? ''
@@ -51,16 +56,22 @@ function ThreadDisplayHandler() {
     }
     React.useEffect(
         () => {
-            console.log("USE EFFECT")
             window.scrollTo(0, 0);
             fetchThread();
             fetchComments();
             const threadID = searchParams.get('id')
             if (threadID) reactionThread(currentUser, threadID, ReactionType.VIEW)
-        }, []);
+        }, [isEditThread]);
 
     const {title, content, id, user, tags, views, createdAt} = thread ?? {}
     const time = convertTimeToMessageHistory(createdAt);
+
+    const navigate = useNavigate();
+    const handleDeleteThread = async () => {
+        const threadID = searchParams.get('id')
+        if (threadID) await deleteThread(threadID, currentUser)
+        navigate("/threads")
+    }
     return (
         <div>
             
@@ -68,8 +79,9 @@ function ThreadDisplayHandler() {
             <div className='flex flex-row min-h-screen  mx-12 lg:mx-12 my-24 gap-10'>
             <SideBar/>
             {thread && 
-            <div className='flex flex-col w-2/3 mx-24 lg:mx-48'>  
+            <div className='flex flex-col lg:w-2/3 w-full lg:mx-48'>  
                 <div className='flex flex-row content-center'>
+                    {isEditThread && <ThreadEditModal threadProps={thread} setIsToggle={setIsEditThread}/>}
                     <button 
                         className={
                             isToggleLike 
@@ -83,7 +95,7 @@ function ThreadDisplayHandler() {
                             setIsToggleLike(!isToggleLike)
                         }}
                     >
-                        <div>{currentLike} ▲</div>
+                        <div>{currentLike} ⬢</div>
                     </button>
                     <div className='flex flex-col'>
                         <div className='text-base'>
@@ -93,8 +105,8 @@ function ThreadDisplayHandler() {
                             {time}
                         </span>
                         {(user?.name === currentUser.name) && <span>
-                            <button className='text-red-600 ml-3'>✎ Edit </button>
-                            <button className='text-red-600 ml-3'>🗑 Delete </button>
+                            <button className='text-red-600 ml-3' onClick={() => setIsEditThread(true)}>✎ Edit </button>
+                            <button className='text-red-600 ml-3' onClick={handleDeleteThread}>🗑 Delete </button>
                         </span>}
                         <div className='text-3xl w-full font-bold text-wrap'>{title}</div>
                             <div className='flex flex-row text-xs gap-2 font-mono'>
@@ -110,7 +122,7 @@ function ThreadDisplayHandler() {
                 <div data-color-mode="light">
                 <MDEditor.Markdown 
                     className='w-full my-5 h-fit' source={content}
-                    style={{'fontFamily':'"Nunito", sans-serif'}}
+                    style={{'fontFamily':'"inter", sans-serif'}}
                 />
                 
                 <hr className='my-3'/>

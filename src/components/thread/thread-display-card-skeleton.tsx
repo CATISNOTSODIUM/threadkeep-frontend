@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NavBar from './nav-bar.tsx';
+import NavBar from '../common/nav-bar.tsx';
 
 export default function ThreadDisplayCardSkeleton() {
     return (
