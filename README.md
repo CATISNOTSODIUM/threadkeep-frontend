@@ -1,4 +1,7 @@
 # ThreadKeep ⬢  - Your personal archive for online conversations.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 **ThreadKeep** is a web forum where people can create online forums. It's designed to be easy to use, and a special feature lets users easily pull out the most important information from other people's forums. This project was developed as a part of CVWO Assignment for the School of Computing, National University of Singapore (NUS). 
 
@@ -11,18 +14,19 @@ While most of the forum discussion platforms available today allow users can eng
 
 This project aims to solve this problem by integrating a built-in data retrieval system. Inspired by an online-shopping platform, where users click on products into their shopping carts and pay for them in a single click, this web forum allows users to filter irrelevant information from multiple threads and retrieve the information at once. 
 
+## Tech Stack
+- **Programming Language**: TypeScript
+- **Third-party Libraries**: React, [dnd-kit](https://dndkit.com/) for drag and drop components,  [react-markdown-editor](https://uiwjs.github.io/react-markdown-editor/) for markdown editor and preview
+- **Styling**: Tailwind CSS
+
 # Table of contents
 - [ThreadKeep ⬢  - Your personal archive for online conversations.](#threadkeep-----your-personal-archive-for-online-conversations)
   - [Introduction](#introduction)
-  - [Objectives](#objectives)
 - [Table of contents](#table-of-contents)
 - [Quick start](#quick-start)
   - [Building and Running the App Locally](#building-and-running-the-app-locally)
   - [Deployment](#deployment)
 - [User manual](#user-manual)
-  - [Account Registeration](#account-registeration)
-  - [Posting Threads and Comments](#posting-threads-and-comments)
-  - [Data retrieval system](#data-retrieval-system)
 - [Acknowledgement](#acknowledgement)
 - [License](#license)
 
@@ -35,11 +39,16 @@ After you have run the following commands, the development server will be hosted
 ## Deployment
 todo!
 # User manual
-todo!
+- [User manual](#user-manual)
+  - [Account Registeration](#account-registeration)
+  - [Posting Threads and Comments](#posting-threads-and-comments)
+  - [Data retrieval system](#data-retrieval-system)
+  
 ## Account Registeration
-todo!
+After visiting the landing page, click on the `Sign In / Register` button to sign in or create a new account. If you're new to ThreadKeep, this web forum authenticates users based solely on their usernames. You can optionally enter a password for added security. Note that you must sign in to view other pages.
+After you have signed in, you will be redirected to `/threads` page.
 ## Posting Threads and Comments
-todo!
+
 ## Data retrieval system
 todo!
 # Acknowledgement
