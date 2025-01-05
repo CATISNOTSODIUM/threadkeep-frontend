@@ -3,6 +3,11 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
+| Name                 | Matriculation number |
+| -------------------- | -------------------- |
+| Kosolpattanadurong Thitiwat       | A0305613N |
+
+
 **ThreadKeep** is a web forum where people can create online forums. It's designed to be easy to use, and a special feature lets users easily pull out the most important information from other people's forums. This project was developed as a part of CVWO Assignment for the School of Computing, National University of Singapore (NUS). 
 
 https://github.com/user-attachments/assets/372ad0d0-b51f-4451-a2a0-a1131c709100
