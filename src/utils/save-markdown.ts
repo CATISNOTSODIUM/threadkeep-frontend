@@ -1,19 +1,56 @@
 import { Thread } from "../models";
 import {marked} from "marked";
-import html2pdf from "html2pdf.js"
-import { githubStyle } from "./github-style.ts";
 
-export const saveMarkdownAsRawText = (fileName, ThreadList: Thread[]) => {
-    const content = ThreadList.map((thread) => `${thread.title}\n\n${thread.content}`).join('\n\n---\n\n')
+export const saveMarkdownAsRawText = (fileName, ThreadList: Thread[], filterStatus={
+      "text": true,
+      "image": true,
+      "code": true
+}) => {
+    let content = ThreadList.map((thread) => `${thread.title}\n\n${thread.content}`).join('\n\n---\n\n')
+    content = filterContent(content, filterStatus)
     saveTextFile(fileName, content);
 }
 
 
-export const saveMarkdownAsMD = (fileName, ThreadList: Thread[]) => {
-    const content = mergeContent(ThreadList);
+export const saveMarkdownAsMD = (fileName, ThreadList: Thread[], filterStatus={
+      "text": true,
+      "image": true,
+      "code": true
+}) => {
+    let content = mergeContent(ThreadList);
+    content = filterContent(content, filterStatus)
     saveTextFile(fileName, content);
 }
 
+export const filterContent = (content, filterStatus) => {
+  const convertCode = !filterStatus["code"]
+  const convertImage = !filterStatus["image"]
+  const removeText = !filterStatus["text"]
+
+  if (!content) return content; // undefined content 
+
+    // convert every code snippet into <code>
+    if (convertCode) {
+        const codeSnippetRegex = /```([\s\S]*?)```/g;
+        content = content.replace(codeSnippetRegex, (_, content) => {
+            return " [code] ";
+        });
+    }
+    
+    // convert every image into <img>
+    if (convertImage) {
+      const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g;
+      content = content.replace(imageRegex, '  [img] ')
+    }
+    
+    if (removeText) {
+      const specialRegex = /```([\s\S]*?)```|!\[([^\]]+)\]\(([^\)]+)\)/g;
+      content = content.match(specialRegex)
+      if (content !== null) content = content.join('\n')
+    }
+
+    return content
+}
 
 export function mergeContent(ThreadList) {
     return ThreadList.map((thread) => `# ${thread.title}\n\n${thread.content}`).join('\n\n---\n')
@@ -28,31 +65,4 @@ function saveTextFile(fileName, content) {
     element.download =  fileName;
     document.body.appendChild(element);
     element.click();
-}
-
-function markdownToHTML(markdownString) {
-  try {
-    // Convert markdown to HTML
-    // You can adjust the style based on the following output
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8">
-          <style>
-            ${githubStyle}
-          </style>
-        </head>
-        <body>
-          ${marked.parse(markdownString)}
-        </body>
-      </html>
-    `;
-
-    return htmlContent;
-
-  } catch (error) {
-    console.error('Error converting Markdown to PDF:', error);
-    throw error;
-  }
 }

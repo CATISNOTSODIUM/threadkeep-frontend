@@ -13,12 +13,9 @@ export default function SignIn() {
     const handleSignIn = async () => {
         setMessage('')
         const res = await verifyUser(username, password);
-        if (res == false) {
+        if (res === false) {
             setMessage("Invalid request. Invalid username or password")
         } else {
-            localStorage.setItem("isLogin", "true");
-            localStorage.setItem("userName", res.name);
-            localStorage.setItem("userID", res.id);
             navigate("/threads")
         }
     }

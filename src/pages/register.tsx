@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import NavBar from '../components/common/nav-bar.tsx';
 import { createUser } from '../api/users.ts';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Register() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
+    const navigate = useNavigate();
     const handleRegister = async () => {
         setMessage('')
         const res = await createUser(username, password);
         if (res.status != 200) {
             setMessage("Invalid request. This username might have already been taken.")
         }
-        console.log(res)
+        navigate("/signin")
     }
     return (
         <div className="flex flex-col min-h-screen justify-center items-center px-48 gap-2">

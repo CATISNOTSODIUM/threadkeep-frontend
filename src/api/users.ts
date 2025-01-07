@@ -1,9 +1,10 @@
+const HOST_API = process.env.REACT_APP_BACKEND_API
 
-const HOST_API = "http://localhost:5000";
-
+// api/users is public (no JWT token required)
 
 export const verifyUser = async (username: string, password: string) => {
     try {
+        
         const response = await fetch(`${HOST_API}/users/verify`, {
             method: "POST",
             headers: {
@@ -15,15 +16,23 @@ export const verifyUser = async (username: string, password: string) => {
             }),
             
         }).then((res) => {
-            if (res.status === 200) {
-                return res.json()
-                    .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
-            } else {
-                return null
-            }
+            return res.json()
+                .then((data) => data)
+                .catch((e) => {throw e})
         })
-        return response
+        // check name
+        const data = response.payload.data
+        if (data.name === undefined) {
+            return false // invalid user
+        } else {
+            // store data in local storage
+            localStorage.setItem("isLogin", "true");
+            localStorage.setItem("userName", data.name);
+            localStorage.setItem("userID", data.id);
+            localStorage.setItem("jwtToken", data.jwt_token);
+            return true
+        }
+
     } catch (error) {
         console.error("Error in retrieving thread", error);
     }

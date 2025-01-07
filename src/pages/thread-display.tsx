@@ -66,12 +66,13 @@ function ThreadDisplayHandler() {
     const {title, content, id, user, tags, views, createdAt} = thread ?? {}
     const time = convertTimeToMessageHistory(createdAt);
 
-    const navigate = useNavigate();
+    
     const handleDeleteThread = async () => {
         const threadID = searchParams.get('id')
         if (threadID) await deleteThread(threadID, currentUser)
         navigate("/threads")
     }
+    
     return (
         <div>
             

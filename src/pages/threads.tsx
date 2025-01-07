@@ -13,7 +13,6 @@ import SearchFilterHandler from '../components/common/search-filter.tsx';
 
 export default function Threads() {
   const navigate = useNavigate();
-  if (!isVerified()) navigate("/signin");
   const [ThreadList, setThreadList] = React.useState<Thread[]>([])
   const [pageNumber, setPageNumber] = React.useState(1)
   const [totalThreads, setTotalThreads] = React.useState(0)
@@ -29,18 +28,25 @@ export default function Threads() {
     setTotalThreads(await countThread())
   }
 
-
   React.useEffect(
     () => {
+      if (!isVerified()) {
+        navigate("/signin");
+        return;
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       fetchThread()
       initPagination()
     }, [pageNumber, filter]
   )
+
+  if (!isVerified()) {
+    return <div></div>
+  }
   return (
     <div>
         <NavBar/>
-        <div className='flex flex-row overflow-y-scroll overflow-x-hidden  mx-12 lg:mx-12  gap-10'>
+        <div className='flex flex-row  overflow-y-scroll overflow-x-hidden  mx-4 md:mx-12 lg:mx-12  gap-10'>
             <SideBar/>
             
             <div className='flex flex-col w-full h-[75vh] mt-24'>

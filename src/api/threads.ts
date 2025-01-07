@@ -1,19 +1,21 @@
-import { use } from "react";
 import { Tag, User } from "../models";
+import {getJWTToken} from "../utils/jwt.ts"
+const HOST_API = process.env.REACT_APP_BACKEND_API
 
-const HOST_API = "http://localhost:5000";
 
-
-export const threadList = async (skip, max_per_page, filter={}) => {
+export const threadList = async (skip, max_per_page, filter={}, userID="") => {
     let url = `${HOST_API}/threads?skip=${skip}&max_per_page=${max_per_page}`
     const urlName = filter["name"] 
     if (urlName) url += `&name=${urlName}`
     const urlTags = filter["tags"]
     if (urlTags) url += `&tags=${filter["tags"].join(',')}`
-    console.log(url)
+    url += `&userID=${userID}`
     try {
         const response = await fetch(url, {
-            method: "GET"
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${getJWTToken()}`,
+            }
         }).then((res) => res.json())
         .then((data) => data.payload.data)
         .catch((e) => {throw e})
@@ -28,6 +30,9 @@ export const countThread = async () => {
     try {
         const response = await fetch(`${HOST_API}/threads/count`, {
             method: "GET",
+            headers: {
+                "Authorization": `Bearer ${getJWTToken()}`,
+            }
         }).then((res) => {
             if (res.status === 200) {
                 return res.json()
@@ -50,7 +55,7 @@ export const getThread = async (user: User, threadID: string) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID
@@ -74,7 +79,9 @@ export const getThread = async (user: User, threadID: string) => {
 export enum ReactionType {
     VIEW = 0,
     LIKE = 1,
-    UNLIKE = 2
+    UNLIKE = 2,
+    SAVED = 3,
+    UNSAVE = 4,
 }
 export const reactionThread = async(user: User, threadID: string, reactionType: ReactionType) => {
     try {
@@ -82,7 +89,7 @@ export const reactionThread = async(user: User, threadID: string, reactionType: 
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                userID: user.id,
@@ -91,8 +98,8 @@ export const reactionThread = async(user: User, threadID: string, reactionType: 
             }),
         }).then((res) => {
             if (res.status === 200) {
-                res.json().then(data => data);
-                return true
+                const output = res.json().then(data => console.log(data));
+                console.log(output)
             } else {
                 return false
             }
@@ -109,7 +116,7 @@ export const isLike = async(user: User, threadID: string) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID,
@@ -138,7 +145,7 @@ export const getComments = async (user: User, threadID: string) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID
@@ -164,7 +171,7 @@ export const createNewComment = async (user: User, threadID: string, content: st
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID,
@@ -188,7 +195,7 @@ export const createNewThread = async (user: User, title: string, content: string
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                title: title,
@@ -216,7 +223,7 @@ export const updateThread = async (threadID: string, user: User, title: string, 
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID,
@@ -247,7 +254,7 @@ export const updateComment = async (commentID: string, user: User, content: stri
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                commentID: commentID,
@@ -277,7 +284,7 @@ export const deleteThread = async (threadID: string, user: User) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID
@@ -305,7 +312,7 @@ export const deleteComment = async (commentID: string, user: User) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                commentID: commentID

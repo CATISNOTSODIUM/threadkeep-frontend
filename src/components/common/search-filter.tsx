@@ -35,7 +35,7 @@ export default function SearchFilterHandler({setFilter}) {
     }, [])
     return (
         <div className='flex flex-row content-center px-3 '>
-            <input id="title" onChange={(e) => setName(e.target.value)} className='block p-2.5 w-1/2 mx-5 text-sm text-gray-700 bg-gray-50 rounded-lg border' placeholder='Search by name'/>
+            <input id="title" onChange={(e) => setName(e.target.value)} className='block p-2.5 w-3/4 lg:w-1/2 mx-5 text-sm text-gray-700 bg-gray-50 rounded-lg border' placeholder='Search by name'/>
             <MultipleSelectChip tags={Object.keys(tagsDict)} selectedTag={selectedTags} setSelectedTag={setSelectedTags}/>
         </div>
 

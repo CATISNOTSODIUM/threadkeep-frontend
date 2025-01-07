@@ -5,7 +5,6 @@ import { isVerified } from '../utils/isVerified.ts';
 
 export default function Home() {
     const navigate = useNavigate();
-
     return (
         <div className="bg-gradient-to-bl from-blue-50 to-red-50 flex flex-col min-h-screen justify-center px-16 lg:px-64">
             
