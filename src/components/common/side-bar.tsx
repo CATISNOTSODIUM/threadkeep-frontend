@@ -1,6 +1,4 @@
 import * as React from 'react';
-import ThreadCard from '../thread/thread-card.tsx';
-
 
 import {
   DndContext, 
@@ -21,68 +19,152 @@ import {
 } from '@dnd-kit/sortable';
 
 import {CSS} from '@dnd-kit/utilities';
-import { Thread } from '../../models/index.ts';
-import { threadList } from '../../api/threads.ts';
+import { Thread, User } from '../../models/index.ts';
+import { reactionThread, ReactionType, threadList } from '../../api/threads.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
+import { mergeContent, saveMarkdownAsMD, saveMarkdownAsRawText } from '../../utils/save-markdown.ts';
+import PreviewModal from './preview-modal.tsx';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import { isVerified } from '../../utils/isVerified.ts';
 
-export default function SideBar() {
-    const [isToggle, setIsToggle] = React.useState(false);
+export default function SideBar({spanPage=false}) {
+    const navigate = useNavigate();
+    if (!isVerified()) navigate("/signin");
+    const [isToggle, setIsToggle] = React.useState(spanPage);
+
     const name = localStorage.getItem("userName");
     const userID = localStorage.getItem("userID");
     const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
     const fetchThread = async () => {
-        const threads = await threadList(0, 5);
-        setThreadList(threads);
+        const threads = await threadList(0, 10, {}, userID ?? "") ?? []; // get saved thread
+        setThreadList(threads.map(
+          (thread) => ({
+            "threadID": thread.id,
+            "title": thread.title,
+            "content": thread.content, // simplify load
+          })
+        ));
     };
 
+    const logOut = () => {
+      localStorage.removeItem("userID");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("jwtToken");
+      navigate("/")
+    }
     React.useEffect(() => {
         fetchThread();
-    }, []);
+    }, [isToggle]);
 
     if (!isToggle) {
         return (<button
-            className='opacity-30 hover:opacity-100 fixed top-0 left-0 z-50 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl'
+            className='fixed opacity-30 hover:opacity-100 top-0 left-0 z-40 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl'
             onClick={() => setIsToggle(true)}
         >
             {"⚙️ 🔧"}
         </button>
         )
     } else {
+        const styleSpanPage = "w-full h-full px-16 lg:px-96";
+        const styleDefault = "border-2 rounded-xl fixed lg:sticky top-24 min-w-64 lg:min-w-96 bg-white  overflow-scroll h-[80vh] rounded-lg p-4 flex flex-col gap-1 z-10";
         return (
-        <div className='min-w-64 lg:min-w-96 bg-gray-50  overflow-scroll sticky top-24 h-screen rounded-lg px-4 pb-24 flex flex-col gap-1'>
-        <button className='sticky top-0 text-right font-bold text-3xl' onClick={() => setIsToggle(false)}>
-                {"×"}
+        <div className={spanPage ? styleSpanPage : styleDefault}>
+        <button className='sticky top-0 right-0 text-right font-bold text-sm' >
+                <span className="bg-gray-200 hover:bg-green-300 hover:text-green-800 rounded-full px-3 py-1 mx-1" onClick={() => fetchThread()}>{"  Refresh ↻  "}</span>
+                {!spanPage && <span className="bg-gray-200  hover:bg-yellow-300 hover:text-yellow-800 rounded-full px-3 py-1 mx-1" onClick={() => setIsToggle(false)}>{"  Close × "}</span>}
+                <button onClick={logOut}
+                className='text-center w-fit bg-gray-200 hover:bg-red-200 hover:text-red-800 font-bold px-5 my-2 py-1 rounded-full'>
+                Log out </button>
         </button>
-        <div className='font-bold text-xl'>Your dashboard 🔥</div>
-        <div className='bg-white/60 p-5 rounded-xl'>
-            <div className='text-base font-bold'>{name?.toUpperCase()}</div>
+        <div className={`font-bold ${spanPage ? "text-4xl" : "text-xl"}`}>Profile</div>
+        <div className='bg-white/60 rounded-xl py-2'>
+            <div className={`font-bold ${spanPage ? "text-2xl" : "text-sm"}`}>
+              {"Username: " + name?.toUpperCase()}
+            </div>
             <div className='text-xs text-gray-500'>{userID}</div>
-            <button onClick={() => {localStorage.removeItem("userID");localStorage.removeItem("userName")}}
-                className='text-center w-fit bg-gray-200 font-bold px-5 rounded-full'>
-                Log out
-            </button>
+            
         </div>
 
-
-        <DashboardThread initialThreadList={ThreadList.map((thread) => ({
-            "title": thread.title,
-            "content": thread.content
-        }))}/>
+        <Filter ThreadList={ThreadList}/>
+        <div className={`h-full ${spanPage ? "h-full" : "max-h-96"} overflow-scroll`}>
+          <hr className='mt-2'/>
+          <div className={`p-1 font-bold ${spanPage ? "text-xl" : "text-sm"}`}>Saved Threads</div>
+          <div className='text-xs text-gray-400 p-1'>You can swap the order. Make sure to refresh after saving/unsaving threads.</div>
+          <DashboardThread ThreadList={ThreadList} setThreadList={setThreadList} triggerRefresh={fetchThread}/>
+        </div>
         </div>
         )
     }
 }
 
 
-function DashboardThread({initialThreadList: initialThreadList}) {
+function Filter({ThreadList}) {
+  // checkbox
+  const [filterStatus, setFilterStatus] = React.useState({
+      "text": true,
+      "image": true,
+      "code": true
+  });
+  const [isToggle, setIsToggle] = React.useState(false);
+  const [isPreviewToggle, setIsPreviewToggle] = React.useState(false);
+  return (
+    <div>
+      {!isToggle ? <button 
+        className="bg-gray-200 hover:bg-green-300 hover:text-green-800 rounded-full px-3 mx-1 text-sm"
+        onClick={() => setIsToggle(true)}
+      >
+        Tool 🛠 </button> : 
+      <div className='border-2 duration-500 p-3 bg-white rounded-xl my-2 flex flex-col text-sm lg:text-base'>
+          <button className=" bg-gray-200 my-2 hover:bg-red-300 hover:text-red-800 rounded-full px-3 text-sm w-fit" onClick={() => setIsToggle(false)}>
+            {"  Close × "}
+          </button>
+          <div className='font-bold text-xl'>Filter</div>
+          <div className='text-xs text-gray-400 my-1'>At this stage, our app only supports text, image, and code snippet.</div>
+          <div className='flex justify-start gap-3'>
+            {
+              Object.entries(filterStatus).map(
+                ([name, status]) => {
+                  return <div 
+                    className={"w-full text-center  rounded-xl px-2 cursor-pointer " + (status ? 'bg-yellow-200' : 'bg-gray-100')}
+                    onClick={() => {
+                      let tmpStatus = Object.assign({}, filterStatus);
+                      tmpStatus[name] = !tmpStatus[name]; 
+                      setFilterStatus(tmpStatus);
+                    }}
+                  >
+                    {name}
+                  </div>
+                }
+              )
+            }
+          </div>
+          <hr className='my-2'/>
+          <div className='font-bold text-xl'>Output</div>
+          <div className='flex flex-row gap-3 '>
+            <button className='w-full text-center border-2 rounded-xl px-2' onClick={() => setIsPreviewToggle(true)}>Preview</button>
+            <button className='w-full text-center border-2 rounded-xl px-2' onClick={() => saveMarkdownAsMD("output.md", ThreadList, filterStatus)}>MD</button>
+            <button className='w-full text-center border-2 rounded-xl px-2' onClick={() => saveMarkdownAsRawText("output.txt", ThreadList, filterStatus)}>TXT</button>
+          </div>
+        {isPreviewToggle && <PreviewModal markdownContent={mergeContent(ThreadList)} setIsToggle={setIsPreviewToggle} filterStatus={filterStatus}/>}
+
+        </div>
+      }
+    </div>
+  )
+}
+
+function DashboardThread({ThreadList, setThreadList, triggerRefresh}) {
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 8, // prioritize other buttons than onDrag
+    },
+  }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
-  const [ThreadList, setThreadList] = React.useState(initialThreadList);
 
   function handleDragEnd(event) {
     const { active, over } = event;
@@ -103,9 +185,10 @@ function DashboardThread({initialThreadList: initialThreadList}) {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
+
       <SortableContext items={ThreadList} strategy={verticalListSortingStrategy}>
         {ThreadList.map((id) => (
-          <SortableItem key={id.id} id={id} />
+          <SortableItem key={id.id} id={id} triggerRefresh={triggerRefresh}/>
         ))}
       </SortableContext>
     </DndContext>
@@ -125,15 +208,31 @@ function SortableItem(props) {
     transform: CSS.Transform.toString(transform),
     transition,
   };
-  const {title, content} = props.id
+  const {title, content, threadID} = props.id
+  const {triggerRefresh} = props
+  const currentUser: User = {
+    id: localStorage.getItem("userID") ?? '',
+    name: localStorage.getItem("userName") ?? ''
+  }
+  const navigate = useNavigate();
   return (
     <div ref={setNodeRef}  style={style} {...listeners} {...attributes}>
-      <div className='bg-white hover:bg-black/50 hover:text-white rounded-md w-full px-3 py-1 flex flex-row justify-between hover:animate-pulse'>
-        <div>
-            <div className='font-bold'>{title}</div>
-            <div className='text-xs'>
+      <div className='bg-white hover:bg-black/50 hover:text-white rounded-md w-full px-3 py-1 flex flex-row justify-between hover:animate-pulse touch-pan-y'>
+        <div 
+          className='relative w-full min-h-8 p-1 pr-5 cursor-pointer'
+        >
+           
+            <div className='font-bold text-sm w-full hover:underline' 
+                onClick={() => {navigate({
+                    pathname: "/thread-display",
+                    search: createSearchParams({
+                        id: threadID
+                    }).toString()
+                })}}
+            >{title}</div>
+            <div className='text-xs w-full'>
                 {truncateBody(content, 30)}
-                </div>
+            </div>
         </div>
 
             
@@ -143,52 +242,16 @@ function SortableItem(props) {
     </div>
   );
 }
+
+
 /*
-import {DndContext, DragOverlay} from '@dnd-kit/core';
-import {useDraggable} from '@dnd-kit/core';
-
-
-export default function SideBar() {
-  const [items] = React.useState(['1', '2', '3', '4', '5']);
-  const [activeId, setActiveId] = React.useState(null);
-  function handleDragStart(event) {
-    setActiveId(event.active.id);
-  }
-
-  function handleDragEnd() {
-    setActiveId(null);
-  }
-
-  return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className='min-w-64 lg:min-w-96 bg-gray-50  overflow-scroll sticky top-24 h-screen rounded-lg px-4 pb-24 flex flex-col gap-1'>
-            {items.map(id =>
-            <Draggable key={id} id={id}>
-                <div>ITEM {id}</div>
-            </Draggable>
-            )}
-        
-        <DragOverlay>
-            {activeId ? (
-            <div>PICK {activeId}</div>
-            ): null}
-        </DragOverlay>
-        </div>
-    </DndContext>
-  );
-  
-}
-
-
-function Draggable(props) {
-  const {attributes, listeners, setNodeRef} = useDraggable({
-    id: props.id,
-  });
-  
-  return (
-    <li ref={setNodeRef} {...listeners} {...attributes}>
-      {props.children}
-    </li>
-  );
-}
+ <div 
+              className='absolute -top-2 -right-2 text-2xl hover:animate-ping'
+              onClick={async () => {
+                await reactionThread(currentUser, threadID, ReactionType.UNSAVE) // unsave thread
+                await triggerRefresh();
+              }}
+            >
+              {"☒"}
+            </div>
 */

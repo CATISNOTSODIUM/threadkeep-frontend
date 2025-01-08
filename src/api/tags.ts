@@ -1,12 +1,15 @@
-import { Tag, User } from "../models";
-
-const HOST_API = "http://localhost:5000";
+import { User } from "../models";
+import {getJWTToken} from "../utils/jwt.ts"
+const HOST_API = process.env.REACT_APP_BACKEND_API
 
 
 export const tagList = async () => {
     try {
         const response = await fetch(`${HOST_API}/threads/tags`, {
-            method: "GET"
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${getJWTToken()}`,
+            },
         }).then((res) => res.json())
         .then((data) => data.payload.data)
         .catch((e) => {throw e})
@@ -22,7 +25,7 @@ export const getThreadTags = async (user: User, threadID: string) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.id}`,
+                "Authorization": `Bearer ${getJWTToken()}`,
             },
             body: JSON.stringify({
                threadID: threadID

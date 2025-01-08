@@ -7,7 +7,8 @@ export interface Thread {
     likes: number,
     views: number,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
+    isSaved: boolean
 }
 export interface Comment {
     id: string,

@@ -7,7 +7,7 @@ export default function NavBar() {
 const tabs = ["Home", "Threads", "Profile"];
   const url = ["/", "/threads", "/profile"];
  return (
-   <nav className="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-100 flex items-center justify-between flex-wrap p-6">
+   <nav className="bg-white fixed w-full z-50 top-0 start-0 border-b border-gray-100 flex items-center justify-between flex-wrap p-6">
      <div className="flex items-center flex-shrink-0 text-white mr-6 lg:mr-72">
       
       <button onClick={() => navigate("/")} className="flex items-center text-black">

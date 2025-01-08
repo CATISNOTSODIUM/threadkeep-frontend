@@ -31,10 +31,12 @@ function ThreadDisplayHandler() {
     const [currentLike, setCurrentLike] = React.useState(0)
     const [isToggleLike, setIsToggleLike] = React.useState(false) // fix: must fetch from user
     const [isEditThread, setIsEditThread] = React.useState(false)
+    const [savedThreadList, setSavedThreadList] = React.useState<Thread[]>([])
     const currentUser: User = {
         id: localStorage.getItem("userID") ?? '',
         name: localStorage.getItem("userName") ?? ''
     }
+    const navigate = useNavigate();
     const fetchThread = async () => {
         const threadID = searchParams.get('id')
         
@@ -66,18 +68,19 @@ function ThreadDisplayHandler() {
     const {title, content, id, user, tags, views, createdAt} = thread ?? {}
     const time = convertTimeToMessageHistory(createdAt);
 
-    const navigate = useNavigate();
+    
     const handleDeleteThread = async () => {
         const threadID = searchParams.get('id')
         if (threadID) await deleteThread(threadID, currentUser)
         navigate("/threads")
     }
+    
     return (
         <div>
             
             <NavBar/>
             <div className='flex flex-row min-h-screen  mx-12 lg:mx-12 my-24 gap-10'>
-            <SideBar/>
+            <SideBar />
             {thread && 
             <div className='flex flex-col lg:w-2/3 w-full lg:mx-48'>  
                 <div className='flex flex-row content-center'>
