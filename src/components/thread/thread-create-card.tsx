@@ -53,13 +53,14 @@ export default function ThreadCreateCard() {
     return (
         <div className='flex flex-col w-full text-left gap-2 rounded-xl my-1 px-3'>
             <button 
-                className="block duration-500 hover:-rotate-1 mb-2 text-base font-bold bg-yellow-200 hover:bg-yellow-300  rounded-full px-5 text-left w-fit py-2 "
+                className="block duration-500 mb-2 text-base font-bold bg-yellow-200 hover:bg-yellow-300  rounded-full px-5 text-left w-fit py-2 "
                 onClick={() => setIsToggle(!isToggle)}
             >
-                CREATE NEW THREAD
+                CREATE
             </button>
            {isToggle &&
            <>
+            <button className='bg-white border-2 hover:bg-gray-50 text-black py-2 rounded-full' onClick={onSubmit}>Start your discussion 🐝</button>
             <input id="title" value={threadTitle} onChange={e => setThreadTitle(e.target.value)} className='block p-2.5 w-full text-sm text-gray-700 bg-gray-50 rounded-lg border ' 
                 placeholder='Title (Max character 100)'>
             </input>
@@ -75,8 +76,7 @@ export default function ThreadCreateCard() {
                 </div>
 
             </div>
-            <button className='bg-white border-2 hover:bg-gray-50 text-black py-2 rounded-full' onClick={onSubmit}>Start your discussion 🐝</button>
-            
+
             </>}
         </div>
     )

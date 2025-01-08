@@ -3,9 +3,11 @@ import NavBar from '../components/common/nav-bar.tsx';
 import { isVerified } from '../utils/isVerified.ts';
 import { useNavigate } from 'react-router-dom';
 import SideBar from '../components/common/side-bar.tsx';
+import { Thread } from '../models/index.ts';
 
 export default function Profile() {
     const navigate = useNavigate();
+    const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
     if (!isVerified()) {
         return (<div className=''>
             <NavBar/>

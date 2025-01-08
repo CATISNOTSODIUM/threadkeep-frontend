@@ -10,7 +10,7 @@ export default function Home() {
             
             <NavBar/>
             <div className="text-6xl font-semibold my-3">ThreadKeep ⬢  </div>
-            <div className='text-2xl'> Emphasizing the collaborative and synergistic nature of idea incubation.</div>
+            <div className='text-2xl'> Your personal archive for online conversations.</div>
             <div className="text-xl my-3">Get a chance to collaborate with other people </div>
 
             {!isVerified() ?

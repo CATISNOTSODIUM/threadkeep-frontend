@@ -14,13 +14,16 @@ import SearchFilterHandler from '../components/common/search-filter.tsx';
 export default function Threads() {
   const navigate = useNavigate();
   const [ThreadList, setThreadList] = React.useState<Thread[]>([])
+  const [savedThreadIDList, setSavedThreadIDList] = React.useState<String[]>([])
   const [pageNumber, setPageNumber] = React.useState(1)
   const [totalThreads, setTotalThreads] = React.useState(0)
   const [filter, setFilter] = React.useState({});
-
+  const userID = localStorage.getItem("userID");
   const threadsPerPage = 7;
   const fetchThread = async () => {
-    const threads = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter)
+    const threads = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter);
+    const _savedThreadIDList = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter, userID ?? '') ?? []; 
+    setSavedThreadIDList(_savedThreadIDList.map(thread => thread.id));
     setThreadList(threads);
   }
 
@@ -46,22 +49,26 @@ export default function Threads() {
   return (
     <div>
         <NavBar/>
-        <div className='flex flex-row  overflow-y-scroll overflow-x-hidden  mx-4 md:mx-12 lg:mx-12  gap-10'>
-            <SideBar/>
+        <div className='flex flex-row  overflow-y-scroll overflow-x-hidden  mx-4 md:mx-36 lg:mx-48  gap-10'>
+            <SideBar />
             
             <div className='flex flex-col w-full h-[75vh] mt-24'>
                 <div className='text-3xl font-bold'>All Threads</div>
                 <ThreadCreateCard/>
+                <hr className='mt-2 mb-4'/>
                 <SearchFilterHandler setFilter={setFilter}/>
                 <hr className='mt-2 mb-4'/>
-                
                   {
+                    ThreadList ?
                     ThreadList
                     .sort((thread1, thread2) => Date.parse(thread2.updatedAt) -  Date.parse(thread1.updatedAt))
-                    .map((thread) => 
+                    .map((thread) => {
+                      thread["isSaved"] = savedThreadIDList.indexOf(thread.id) > -1
+                      return thread;
+                    }).map((thread) => 
                       thread &&
                       <ThreadCard {...(thread as object as Thread)}/>
-                    )
+                    ) : <div>cannot load threads</div>
                   }
             </div>
             

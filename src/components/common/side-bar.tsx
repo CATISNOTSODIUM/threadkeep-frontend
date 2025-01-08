@@ -36,7 +36,7 @@ export default function SideBar({spanPage=false}) {
     const userID = localStorage.getItem("userID");
     const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
     const fetchThread = async () => {
-        const threads = await threadList(0, 10, {}, userID ?? ""); // get saved thread
+        const threads = await threadList(0, 10, {}, userID ?? "") ?? []; // get saved thread
         setThreadList(threads.map(
           (thread) => ({
             "threadID": thread.id,
@@ -114,7 +114,7 @@ function Filter({ThreadList}) {
         onClick={() => setIsToggle(true)}
       >
         Tool 🛠 </button> : 
-      <div className='border-2 p-3 bg-white rounded-xl my-2 flex flex-col text-sm lg:text-base'>
+      <div className='border-2 duration-500 p-3 bg-white rounded-xl my-2 flex flex-col text-sm lg:text-base'>
           <button className=" bg-gray-200 my-2 hover:bg-red-300 hover:text-red-800 rounded-full px-3 text-sm w-fit" onClick={() => setIsToggle(false)}>
             {"  Close × "}
           </button>
@@ -220,23 +220,16 @@ function SortableItem(props) {
       <div className='bg-white hover:bg-black/50 hover:text-white rounded-md w-full px-3 py-1 flex flex-row justify-between hover:animate-pulse touch-pan-y'>
         <div 
           className='relative w-full min-h-8 p-1 pr-5 cursor-pointer'
-          onClick={() => {navigate({
-                pathname: "/thread-display",
-                search: createSearchParams({
-                    id: threadID
-                }).toString()
-            })}}
         >
-            <div 
-              className='absolute -top-2 -right-2 text-2xl '
-              onClick={async () => {
-                await reactionThread(currentUser, threadID, ReactionType.UNSAVE) // unsave thread
-                await triggerRefresh();
-              }}
-            >
-              {"☒"}
-            </div>
-            <div className='font-bold text-sm w-full'>{title}</div>
+           
+            <div className='font-bold text-sm w-full hover:underline' 
+                onClick={() => {navigate({
+                    pathname: "/thread-display",
+                    search: createSearchParams({
+                        id: threadID
+                    }).toString()
+                })}}
+            >{title}</div>
             <div className='text-xs w-full'>
                 {truncateBody(content, 30)}
             </div>
@@ -249,3 +242,16 @@ function SortableItem(props) {
     </div>
   );
 }
+
+
+/*
+ <div 
+              className='absolute -top-2 -right-2 text-2xl hover:animate-ping'
+              onClick={async () => {
+                await reactionThread(currentUser, threadID, ReactionType.UNSAVE) // unsave thread
+                await triggerRefresh();
+              }}
+            >
+              {"☒"}
+            </div>
+*/
