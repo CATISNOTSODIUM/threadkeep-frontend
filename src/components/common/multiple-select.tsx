@@ -35,7 +35,7 @@ export default function MultipleSelectChip({tags, selectedTag, setSelectedTag}) 
   }, [selectedTag])
   
   return (
-    <FormControl sx={{ width: "100%" }}>
+    <FormControl sx={{ width: "100%", color: "white", bgcolor:"white" }}>
         <InputLabel id="demo-multiple-chip-label">Tags</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
@@ -65,34 +65,3 @@ export default function MultipleSelectChip({tags, selectedTag, setSelectedTag}) 
       </FormControl>
   );
 }
-
-/*
-      <FormControl sx={{ width: "100%" }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
-        <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
-          multiple
-          value={selectedTag}
-          onChange={value => handleChange(value)}
-          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {(tags).map((tag) => (
-            <MenuItem
-              key={tag}
-              value={tag}
-            >
-              {tag}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-*/

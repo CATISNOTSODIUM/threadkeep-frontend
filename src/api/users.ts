@@ -18,7 +18,7 @@ export const verifyUser = async (username: string, password: string) => {
         }).then((res) => {
             return res.json()
                 .then((data) => data)
-                .catch((e) => {throw e})
+                .catch((e) => {console.error(e)})
         })
         // check name
         const data = response.payload.data

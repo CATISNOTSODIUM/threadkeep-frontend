@@ -18,11 +18,10 @@ export const threadList = async (skip, max_per_page, filter={}, userID="") => {
             }
         }).then((res) => res.json())
         .then((data) => data.payload.data)
-        .catch((e) => {throw e})
+        .catch((e) => {console.error(e)})
         return response
     } catch (error) {
         console.error("Error in retrieving document list", error);
-        throw error;
     }
 }
 
@@ -37,7 +36,7 @@ export const countThread = async () => {
             if (res.status === 200) {
                 return res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
             } else {
                 return null
             }
@@ -45,7 +44,6 @@ export const countThread = async () => {
         return response
     } catch (error) {
         console.error("Error in retrieving thread", error);
-        throw error;
     }
 }
 
@@ -64,7 +62,7 @@ export const getThread = async (user: User, threadID: string) => {
             if (res.status === 200) {
                 return res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
             } else {
                 return null
             }
@@ -72,7 +70,6 @@ export const getThread = async (user: User, threadID: string) => {
         return response
     } catch (error) {
         console.error("Error in retrieving thread", error);
-        throw error;
     }
 }
 
@@ -126,7 +123,7 @@ export const isLike = async(user: User, threadID: string) => {
             if (res.status === 200) {
                 const result =  res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
                 return result;
             } else {
                 return false
@@ -135,7 +132,6 @@ export const isLike = async(user: User, threadID: string) => {
         return response
     } catch (error) {
         console.error("Error in reacting thread", error);
-        throw error;
     }
 }
 
@@ -154,7 +150,7 @@ export const getComments = async (user: User, threadID: string) => {
             if (res.status === 200) {
                 return res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
             } else {
                 return null
             }
@@ -180,7 +176,7 @@ export const createNewComment = async (user: User, threadID: string, content: st
             }),
         }).then((res) => res.json())
         .then((data) => data.payload.data)
-        .catch((e) => {throw e})
+        .catch((e) => {console.error(e)})
         return response
     } catch (error) {
         console.error("Error in retrieving document list", error);
@@ -235,7 +231,7 @@ export const updateThread = async (threadID: string, user: User, title: string, 
             if (res.status === 200) {
                 res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
                 return true;
             } else {
                 return false
@@ -265,7 +261,7 @@ export const updateComment = async (commentID: string, user: User, content: stri
             if (res.status === 200) {
                 res.json()
                     .then((data) => console.log(data.payload.data))
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
                 return true;
             } else {
                 return false
@@ -293,7 +289,7 @@ export const deleteThread = async (threadID: string, user: User) => {
             if (res.status === 200) {
                 res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
                 return true;
             } else {
                 return false
@@ -321,7 +317,7 @@ export const deleteComment = async (commentID: string, user: User) => {
             if (res.status === 200) {
                 res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
                 return true;
             } else {
                 return false

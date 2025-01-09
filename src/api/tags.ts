@@ -12,7 +12,7 @@ export const tagList = async () => {
             },
         }).then((res) => res.json())
         .then((data) => data.payload.data)
-        .catch((e) => {throw e})
+        .catch((e) => {console.error(e)})
         return response
     } catch (error) {
         console.error("Error in retrieving tag list", error);
@@ -34,7 +34,7 @@ export const getThreadTags = async (user: User, threadID: string) => {
             if (res.status === 200) {
                 return res.json()
                     .then((data) => data.payload.data)
-                    .catch((e) => {throw e})
+                    .catch((e) => {console.error(e)})
             } else {
                 return null
             }
@@ -42,6 +42,5 @@ export const getThreadTags = async (user: User, threadID: string) => {
         return response
     } catch (error) {
         console.error("Error in retrieving thread", error);
-        throw error;
     }
 }
