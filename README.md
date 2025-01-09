@@ -5,11 +5,6 @@
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 ## About this project
-
-| Name                 | Matriculation number |
-| -------------------- | -------------------- |
-| Kosolpattanadurong Thitiwat       | A0305613N |
-
 **ThreadKeep** is a web forum where people can create online forums. It's designed to be easy to use, and a special feature lets users easily pull out the most important information from other people's forums. This project was developed as a part of CVWO Assignment for the School of Computing, National University of Singapore (NUS). This is the **frontend** repository. For backend repository, please visit [here](https://github.com/CATISNOTSODIUM/threadkeep-backend).
 
 
