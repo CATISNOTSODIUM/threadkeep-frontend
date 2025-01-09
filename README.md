@@ -58,7 +58,7 @@ To start a local development server, make sure to install the required dependenc
 After you have run the following commands, the development server will be hosted at port 3000 `http://localhost:3000/`. 
 
 ## Deployment
-There are many deployment options we can choose. Personally, I use [Vercel](https://vercel.com) since it has free-tier and convenient to deploy.
+There are many deployment options we can choose. Personally, I use [Vercel](https://vercel.com) since it has free-tier and convenient to deploy. This project is deployed [here](https://threadkeep-frontend.vercel.app).
 # User manual
 **ThreadKeep** is designed to be easy to use, with complete CRUD operation and its ability to save threads and retrieve information from them. Here is the basic user guide.
 ## Account Registeration
