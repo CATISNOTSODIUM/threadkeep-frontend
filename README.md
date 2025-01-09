@@ -61,9 +61,11 @@ After visiting the landing page, click on the `Sign In / Register` button to sig
 ## Threads Management
 ### Create threads
 To create a new thread, simply click the `CREATE` button. Each thread requires a title and a description.
-**Title**: A concise and informative name for your thread.
-**Description**: A more detailed explanation of the topic or discussion you're starting. This provides context for other users. While the description text field is supported by markdown, `LaTex` has not yet been supported.
-**Optional Tags:** You can also add tags to your thread to categorize it and make it easier for others to find. Tags are optional, but they can be very helpful in organizing and discovering relevant discussions.
+
+- **Title**: A concise and informative name for your thread.
+- **Description**: A more detailed explanation of the topic or discussion you're starting. This provides context for other users. While the description text field is supported by markdown, `LaTex` has not yet been supported.
+- **Optional Tags:** You can also add tags to your thread to categorize it and make it easier for others to find. Tags are optional, but they can be very helpful in organizing and discovering relevant discussions.
+
 ![posting-threads-preview](figure/thread-create.png)
 ### Update threads
 To update **your** thread, Find the thread you wish to update within the `/thread` page. Note that only thread with `Edit` icon can be modified. Then, click into the thread card you wish to edit, look for an `Edit` button and make your changes.
