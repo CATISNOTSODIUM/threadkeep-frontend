@@ -47,17 +47,15 @@ export default function Threads() {
     return <div></div>
   }
   return (
-    <div>
+    <div >
         <NavBar/>
         <div className='flex flex-row  overflow-y-scroll overflow-x-hidden  mx-4 md:mx-36 lg:mx-48  gap-10'>
             <SideBar />
-            
             <div className='flex flex-col w-full h-[75vh] mt-24'>
-                <div className='text-3xl font-bold'>All Threads</div>
                 <ThreadCreateCard/>
+                <div className='text-3xl font-bold'>All Threads</div>
                 <hr className='mt-2 mb-4'/>
                 <SearchFilterHandler setFilter={setFilter}/>
-                <hr className='mt-2 mb-4'/>
                   {
                     ThreadList ?
                     ThreadList

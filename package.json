@@ -26,6 +26,7 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.0.0",
     "react-html2pdf": "^1.0.1",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
     "rehype-sanitize": "^6.0.0"

@@ -60,22 +60,23 @@ export default function ThreadCreateCard() {
             </button>
            {isToggle &&
            <>
-            <button className='bg-white border-2 hover:bg-gray-50 text-black py-2 rounded-full' onClick={onSubmit}>Start your discussion 🐝</button>
-            <input id="title" value={threadTitle} onChange={e => setThreadTitle(e.target.value)} className='block p-2.5 w-full text-sm text-gray-700 bg-gray-50 rounded-lg border ' 
-                placeholder='Title (Max character 100)'>
-            </input>
+           <div className="flex flex-row">
+                <input id="title" value={threadTitle} onChange={e => setThreadTitle(e.target.value)} 
+                    className='block p-3 w-full text-sm text-black bg-white rounded-md mr-2 border-2 ' 
+                    placeholder='Title (Max character 100)'>
+                </input>
+                <MultipleSelectChip tags={Object.keys(tagsDict)} selectedTag={selectedTags} setSelectedTag={setSelectedTags}/>
+           </div>
+            
             <div data-color-mode="light">
                 <MarkdownHandler content={threadContent} setContent={setThreadContent}/>
             </div>
+            <button className='bg-white w-fit border-2 text-black hover:animate-pulse py-2 px-3 rounded-full' onClick={onSubmit}>Start your discussion 🐝</button>
+
             <div className='text-xs text-red-400'>
                 {message}
             </div>
-            <div id="title" className='p-2.5 font-mono w-full text-sm text-gray-700 rounded-lg  flex flex-col gap-2 overflow-y-scroll'>
-                <div>
-                <MultipleSelectChip tags={Object.keys(tagsDict)} selectedTag={selectedTags} setSelectedTag={setSelectedTags}/>
-                </div>
 
-            </div>
 
             </>}
         </div>
