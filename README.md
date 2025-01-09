@@ -7,8 +7,9 @@
 | -------------------- | -------------------- |
 | Kosolpattanadurong Thitiwat       | A0305613N |
 
+Demo: https://threadkeep-frontend.vercel.app
 
-![image](https://github.com/user-attachments/assets/14a408a0-fb4d-4863-84fc-9e39be790d12)
+![image](https://github.com/user-attachments/assets/322d47cf-cae9-46fd-aa9e-14720a3b7f7b)
 
 **ThreadKeep** is a web forum where people can create online forums. It's designed to be easy to use, and a special feature lets users easily pull out the most important information from other people's forums. This project was developed as a part of CVWO Assignment for the School of Computing, National University of Singapore (NUS). This is the **frontend** repository. For backend repository, please visit [here](https://github.com/CATISNOTSODIUM/threadkeep-backend).
 
