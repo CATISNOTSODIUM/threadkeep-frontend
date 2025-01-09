@@ -30,6 +30,7 @@ This project aims to solve this problem by integrating a built-in data retrieval
   - [Tech Stack](#tech-stack)
 - [Table of contents](#table-of-contents)
 - [Quick start](#quick-start)
+  - [Configure your `.env.local` file](#configure-your-envlocal-file)
   - [Building and Running the App Locally](#building-and-running-the-app-locally)
   - [Deployment](#deployment)
 - [User manual](#user-manual)
@@ -40,8 +41,16 @@ This project aims to solve this problem by integrating a built-in data retrieval
 - [License](#license)
 
 # Quick start
+## Configure your `.env.local` file
+In order to connect with backend, you need to configure your `.env.local` file.
+By default, if you host your backend locally, your environment file should be like this.
+If you have already hosted your backend, please replace `REACT_APP_BACKEND_API` with your deployed backend url.
+```bash
+NODE_PATH=./src
+REACT_APP_BACKEND_API="http://localhost:5000"
+```
 ## Building and Running the App Locally
-To start a local development server, make sure to install the required dependencies by running `npm install`. Then, you can start the local server by executing `npm start`.
+To start a local development server, make sure to install the required dependencies by running `npm install`. Then, you can start the local server by executing `npm art`.
 
 After you have run the following commands, the development server will be hosted at port 3000 `http://localhost:3000/`. 
 
