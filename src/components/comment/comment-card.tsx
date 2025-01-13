@@ -18,7 +18,10 @@ export default function CommentCard(props: Comment) {
     }
     const [isToggleEdit, setIsToggleEdit] = React.useState(false);
     const handleCommentDelete = async () => {
-        await deleteComment(id, currentUser);
+        const commentRequest = await deleteComment(id, currentUser);
+        if (commentRequest.error) {
+            return;
+        }
         window.location.reload();
     }
     return (

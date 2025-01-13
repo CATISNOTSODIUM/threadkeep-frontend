@@ -22,16 +22,15 @@ export default function ThreadDisplay() { // fix: remove
         </Suspense>
     )
 } 
-// todo: update like when clicked
+
 function ThreadDisplayHandler() {
     
     const [searchParams, setSearchParams] = useSearchParams();
     const [thread, setThread] = React.useState<Thread>()
     const [comments, setComments] = React.useState<Comment[]>([])
     const [currentLike, setCurrentLike] = React.useState(0)
-    const [isToggleLike, setIsToggleLike] = React.useState(false) // fix: must fetch from user
+    const [isToggleLike, setIsToggleLike] = React.useState(false) 
     const [isEditThread, setIsEditThread] = React.useState(false)
-    const [savedThreadList, setSavedThreadList] = React.useState<Thread[]>([])
     const currentUser: User = {
         id: localStorage.getItem("userID") ?? '',
         name: localStorage.getItem("userName") ?? ''
@@ -41,19 +40,21 @@ function ThreadDisplayHandler() {
         const threadID = searchParams.get('id')
         
         if (threadID) {
-            const thread = await getThread(currentUser, threadID);
-            const {likes} = thread ?? {}
+            const threadRequest = await getThread(threadID);
+            const { likes } = threadRequest.data
             setCurrentLike(likes)
-            setThread(thread)
-            const likeStatus = await isLike(currentUser, threadID);
-            setIsToggleLike(likeStatus);
+            setThread(threadRequest.data)
+            const likeStatusRequest = await isLike(currentUser, threadID);
+            if (!likeStatusRequest.error) {
+                setIsToggleLike(likeStatusRequest.data);
+            }
         }
     }
     const fetchComments = async () => {
         const threadID = searchParams.get('id')
         if (threadID) {
-            const  comments = await getComments(currentUser, threadID);
-            setComments(comments)
+            const commentsRequest = await getComments(threadID);
+            setComments(commentsRequest.data);
         }
     }
     React.useEffect(
@@ -71,7 +72,12 @@ function ThreadDisplayHandler() {
     
     const handleDeleteThread = async () => {
         const threadID = searchParams.get('id')
-        if (threadID) await deleteThread(threadID, currentUser)
+        if (threadID) {
+            const threadRequest = await deleteThread(threadID, currentUser);
+            if (threadRequest.error) {
+                return;
+            } 
+        }
         navigate("/threads")
     }
     

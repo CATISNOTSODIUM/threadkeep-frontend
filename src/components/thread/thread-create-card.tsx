@@ -43,8 +43,12 @@ export default function ThreadCreateCard() {
             return;
         }
         
-        const res = await createNewThread(user, threadTitle, threadContent, selectedTags.map(tag => tagsDict[tag]))
-        window.location.reload(); 
+        const threadRequest = await createNewThread(user, threadTitle, threadContent, selectedTags.map(tag => tagsDict[tag]))
+        if (threadRequest.error) {
+            setMessage(threadRequest.error)
+        } else {
+            window.location.reload(); 
+        }
     }
 
     React.useEffect(() => {

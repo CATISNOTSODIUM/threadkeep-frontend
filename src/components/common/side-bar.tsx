@@ -19,7 +19,7 @@ import {
 } from '@dnd-kit/sortable';
 
 import {CSS} from '@dnd-kit/utilities';
-import { Thread, User } from '../../models/index.ts';
+import { ThreadSimplified, User } from '../../models/index.ts';
 import { reactionThread, ReactionType, threadList } from '../../api/threads.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
 import { mergeContent, saveMarkdownAsMD, saveMarkdownAsRawText } from '../../utils/save-markdown.ts';
@@ -34,16 +34,20 @@ export default function SideBar({spanPage=false}) {
 
     const name = localStorage.getItem("userName");
     const userID = localStorage.getItem("userID");
-    const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
+    const [ThreadList, setThreadList] = React.useState<ThreadSimplified[]>([]);
     const fetchThread = async () => {
-        const threads = await threadList(0, 10, {}, userID ?? "") ?? []; // get saved thread
-        setThreadList(threads.map(
-          (thread) => ({
-            "threadID": thread.id,
-            "title": thread.title,
-            "content": thread.content, // simplify load
-          })
-        ));
+        const threadsRequest = await threadList(0, 10, {}, userID ?? "");
+        if (!threadsRequest.error) {
+          const threadListSimplified = threadsRequest.data.map(
+            (thread) => ({
+              "threadID": thread.id,
+              "title": thread.title,
+              "content": thread.content, // simplify load
+            })
+          )
+          setThreadList(threadListSimplified);
+        } 
+        
     };
 
     const logOut = () => {
