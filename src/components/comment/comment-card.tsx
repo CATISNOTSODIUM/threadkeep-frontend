@@ -1,24 +1,21 @@
 import * as React from 'react';
 import {Comment, User} from '../../models/index.ts'
 import { convertTimeToMessageHistory } from '../../utils/message-history.ts';
-import { truncateBody } from '../../utils/truncate-body.ts';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import MDEditor from '@uiw/react-md-editor';
 import CommentEditModal from './comment-edit.tsx';
 import { deleteComment } from '../../api/threads.ts';
+import { getUser } from '../../utils/jwt.ts';
 
 export default function CommentCard(props: Comment) {
-    const navigate = useNavigate();
-    const {content, id, user, likes, views, createdAt} = props
-    const tags = []
+    const {content, id, user, createdAt} = props
     const time = convertTimeToMessageHistory(createdAt);
-    const currentUser: User = {
-            id: localStorage.getItem("userID") ?? '',
-            name: localStorage.getItem("userName") ?? ''
-    }
+    const currentUser:User =  getUser()
     const [isToggleEdit, setIsToggleEdit] = React.useState(false);
     const handleCommentDelete = async () => {
-        await deleteComment(id, currentUser);
+        const commentRequest = await deleteComment(id, currentUser);
+        if (commentRequest.error) {
+            return;
+        }
         window.location.reload();
     }
     return (

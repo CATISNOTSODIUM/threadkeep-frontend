@@ -17,18 +17,34 @@ export default function Threads() {
   const [savedThreadIDList, setSavedThreadIDList] = React.useState<String[]>([])
   const [pageNumber, setPageNumber] = React.useState(1)
   const [totalThreads, setTotalThreads] = React.useState(0)
+  const [message, setMessage] = React.useState("");
   const [filter, setFilter] = React.useState({});
   const userID = localStorage.getItem("userID");
   const threadsPerPage = 7;
   const fetchThread = async () => {
-    const threads = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter);
-    const _savedThreadIDList = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter, userID ?? '') ?? []; 
-    setSavedThreadIDList(_savedThreadIDList.map(thread => thread.id));
-    setThreadList(threads);
+    setMessage("Pending ...")
+    const threadsRequest = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter);
+    if (!threadsRequest.error) {
+      setThreadList(threadsRequest.data);
+    } else {
+      setMessage(threadsRequest.error)
+      return;
+    }
+
+    const savedThreadIDListRequest = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter, userID ?? ''); 
+    if (!savedThreadIDListRequest.error) {
+      setSavedThreadIDList(savedThreadIDListRequest.data.map(thread => thread.id));
+    } else {
+      setMessage(savedThreadIDListRequest.error)
+      return;
+    }
+
+    setMessage("")
   }
 
   const initPagination = async () => {
-    setTotalThreads(await countThread())
+    const countThreadRequest = await countThread()
+    setTotalThreads(countThreadRequest.data)
   }
 
   React.useEffect(
@@ -56,6 +72,7 @@ export default function Threads() {
                 <div className='text-3xl font-bold'>All Threads</div>
                 <hr className='mt-2 mb-4'/>
                 <SearchFilterHandler setFilter={setFilter}/>
+                <div className='text-sm text-red-600'>{message}</div>
                   {
                     ThreadList ?
                     ThreadList

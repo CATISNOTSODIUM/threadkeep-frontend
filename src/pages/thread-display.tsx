@@ -11,6 +11,7 @@ import CommentsCreateCard from '../components/comment/comment-create-card.tsx';
 import ThreadDisplayCardSkeleton from '../components/thread/thread-display-card-skeleton.tsx'
 import ThreadEditModal from '../components/thread/thread-edit.tsx';
 import { isVerified } from '../utils/isVerified.ts';
+import { getUser } from '../utils/jwt.ts';
 
 
 export default function ThreadDisplay() { // fix: remove
@@ -22,38 +23,36 @@ export default function ThreadDisplay() { // fix: remove
         </Suspense>
     )
 } 
-// todo: update like when clicked
+
 function ThreadDisplayHandler() {
     
     const [searchParams, setSearchParams] = useSearchParams();
     const [thread, setThread] = React.useState<Thread>()
     const [comments, setComments] = React.useState<Comment[]>([])
     const [currentLike, setCurrentLike] = React.useState(0)
-    const [isToggleLike, setIsToggleLike] = React.useState(false) // fix: must fetch from user
+    const [isToggleLike, setIsToggleLike] = React.useState(false) 
     const [isEditThread, setIsEditThread] = React.useState(false)
-    const [savedThreadList, setSavedThreadList] = React.useState<Thread[]>([])
-    const currentUser: User = {
-        id: localStorage.getItem("userID") ?? '',
-        name: localStorage.getItem("userName") ?? ''
-    }
+    const currentUser: User = getUser()
     const navigate = useNavigate();
     const fetchThread = async () => {
         const threadID = searchParams.get('id')
         
         if (threadID) {
-            const thread = await getThread(currentUser, threadID);
-            const {likes} = thread ?? {}
+            const threadRequest = await getThread(threadID);
+            const { likes } = threadRequest.data
             setCurrentLike(likes)
-            setThread(thread)
-            const likeStatus = await isLike(currentUser, threadID);
-            setIsToggleLike(likeStatus);
+            setThread(threadRequest.data)
+            const likeStatusRequest = await isLike(currentUser, threadID);
+            if (!likeStatusRequest.error) {
+                setIsToggleLike(likeStatusRequest.data);
+            }
         }
     }
     const fetchComments = async () => {
         const threadID = searchParams.get('id')
         if (threadID) {
-            const  comments = await getComments(currentUser, threadID);
-            setComments(comments)
+            const commentsRequest = await getComments(threadID);
+            setComments(commentsRequest.data);
         }
     }
     React.useEffect(
@@ -65,13 +64,18 @@ function ThreadDisplayHandler() {
             if (threadID) reactionThread(currentUser, threadID, ReactionType.VIEW)
         }, [isEditThread]);
 
-    const {title, content, id, user, tags, views, createdAt} = thread ?? {}
+    const {title, content, id, user, tags, createdAt} = thread ?? {}
     const time = convertTimeToMessageHistory(createdAt);
 
     
     const handleDeleteThread = async () => {
         const threadID = searchParams.get('id')
-        if (threadID) await deleteThread(threadID, currentUser)
+        if (threadID) {
+            const threadRequest = await deleteThread(threadID, currentUser);
+            if (threadRequest.error) {
+                return;
+            } 
+        }
         navigate("/threads")
     }
     

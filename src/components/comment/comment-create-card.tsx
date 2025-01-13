@@ -12,9 +12,13 @@ export default function CommentsCreateCard(props: {threadID: string, fetchCommen
     
     const [isToggle, setIsToggle] = React.useState(false);
     const [commentsContent, setCommentsContent] = React.useState("");
-
+    const [message, setMessage] = React.useState("");
     const onSubmit = async () => {
-        await createNewComment(user, threadID, commentsContent)
+        const commentRequest = await createNewComment(user, threadID, commentsContent)
+        if (commentRequest.error) {
+            setMessage(commentRequest.error);
+            return;
+        }
         await fetchComments()
         setIsToggle(false)
     }
@@ -28,6 +32,7 @@ export default function CommentsCreateCard(props: {threadID: string, fetchCommen
             </button>
            {isToggle &&
            <>
+            <div className='text-sm text-red-600'>{message}</div>
             <MarkdownHandler content={commentsContent} setContent={setCommentsContent}/>
             <div className='text-xs text-gray-400'>
                 At this stage, only image URLs are allowed.

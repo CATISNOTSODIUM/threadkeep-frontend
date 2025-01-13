@@ -9,10 +9,13 @@ export default function SearchFilterHandler({setFilter}) {
     const [selectedTags, setSelectedTags] = React.useState<string[]>([])
 
     const fetchTags = async () => {
-        const res = await tagList(); // res is an array
+        const tagsRequest = await tagList(); // res is an array
+        if (tagsRequest.error) {
+            return;
+        }
         try {
             const tmp = {}
-            res.forEach(tag => {
+            tagsRequest.data.forEach(tag => {
                 tmp[tag.name] = tag
             });
             setTagsDict(tmp)
