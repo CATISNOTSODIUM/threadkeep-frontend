@@ -26,14 +26,15 @@ import { mergeContent, saveMarkdownAsMD, saveMarkdownAsRawText } from '../../uti
 import PreviewModal from './preview-modal.tsx';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { isVerified } from '../../utils/isVerified.ts';
+import { getUser, removeUser } from '../../utils/jwt.ts';
 
 export default function SideBar({spanPage=false}) {
     const navigate = useNavigate();
     if (!isVerified()) navigate("/signin");
     const [isToggle, setIsToggle] = React.useState(spanPage);
-
-    const name = localStorage.getItem("userName");
-    const userID = localStorage.getItem("userID");
+    const currentUser = getUser();
+    const name = currentUser.name;
+    const userID = currentUser.id;
     const [ThreadList, setThreadList] = React.useState<ThreadSimplified[]>([]);
     const fetchThread = async () => {
         const threadsRequest = await threadList(0, 10, {}, userID ?? "");
@@ -51,9 +52,7 @@ export default function SideBar({spanPage=false}) {
     };
 
     const logOut = () => {
-      localStorage.removeItem("userID");
-      localStorage.removeItem("userName");
-      localStorage.removeItem("jwtToken");
+      removeUser();
       navigate("/")
     }
     React.useEffect(() => {

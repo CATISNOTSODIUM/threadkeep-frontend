@@ -2,13 +2,11 @@ import * as React from 'react';
 import MarkdownHandler from '../common/markdown-editor.tsx';
 import { User } from '../../models/index.ts';
 import { createNewComment } from '../../api/threads.ts';
+import { getUser } from '../../utils/jwt.ts';
 
 export default function CommentsCreateCard(props: {threadID: string, fetchComments: () => Promise<void>}) {
     const {threadID, fetchComments} = props;
-    const user: User = {
-        id: localStorage.getItem("userID") ?? '',
-        name: localStorage.getItem("userName") ?? ''
-    }
+    const user: User = getUser();
     
     const [isToggle, setIsToggle] = React.useState(false);
     const [commentsContent, setCommentsContent] = React.useState("");

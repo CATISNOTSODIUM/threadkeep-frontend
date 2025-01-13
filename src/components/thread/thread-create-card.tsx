@@ -4,12 +4,10 @@ import { Tag, User } from '../../models/index.ts';
 import { createNewThread } from '../../api/threads.ts';
 import MultipleSelectChip from '../common/multiple-select.tsx';
 import { tagList } from '../../api/tags.ts';
+import { getUser } from '../../utils/jwt.ts';
 
 export default function ThreadCreateCard() {
-    const user: User = {
-        id: localStorage.getItem("userID") ?? '',
-        name: localStorage.getItem("userName") ?? ''
-    }
+    const user: User = getUser();
     const [tagsDict, setTagsDict] = React.useState<{[name: string] : Tag}>({})
     const [isToggle, setIsToggle] = React.useState(false);
     const [threadTitle, setThreadTitle] = React.useState("");

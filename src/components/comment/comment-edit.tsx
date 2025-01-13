@@ -3,16 +3,14 @@ import * as React from 'react';
 import {Comment, User} from '../../models/index.ts'
 import MarkdownHandler from '../common/markdown-editor.tsx';
 import { updateComment } from '../../api/threads.ts';
+import { getUser } from '../../utils/jwt.ts';
 
 export default function CommentEditModal(props: {commentProps: Comment, setIsToggle: React.Dispatch<React.SetStateAction<boolean>>}) {
     const {commentProps, setIsToggle} = props;
     const {content, id, user, likes, views, createdAt} = commentProps;
     const [commentsContent, setCommentsContent] = React.useState(content);
     const tags = []
-    const currentUser: User = {
-            id: localStorage.getItem("userID") ?? '',
-            name: localStorage.getItem("userName") ?? ''
-    }
+    const currentUser: User = getUser();
     const submitComment = async () => {
         await updateComment(id, currentUser, commentsContent);
         setIsToggle(false);

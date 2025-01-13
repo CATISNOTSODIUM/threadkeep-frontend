@@ -3,6 +3,7 @@ import * as React from 'react';
 import {Thread, User} from '../../models/index.ts'
 import MarkdownHandler from '../common/markdown-editor.tsx';
 import { updateThread } from '../../api/threads.ts';
+import { getUser } from '../../utils/jwt.ts';
 
 export default function ThreadEditModal(props: {threadProps: Thread, setIsToggle: React.Dispatch<React.SetStateAction<boolean>>}) {
     const {threadProps, setIsToggle} = props;
@@ -10,10 +11,8 @@ export default function ThreadEditModal(props: {threadProps: Thread, setIsToggle
     const [threadContent, setThreadContent] = React.useState(content);
     const [threadTitle, setThreadTitle] = React.useState(title);
     const [message, setMessage] = React.useState("");
-    const currentUser: User = {
-        id: localStorage.getItem("userID") ?? '',
-        name: localStorage.getItem("userName") ?? ''
-    }
+    const currentUser: User = getUser();
+    
     const submitThread = async () => {
         setMessage("")
         const threadRequest = await updateThread(id, currentUser, threadTitle, threadContent);

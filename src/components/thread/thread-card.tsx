@@ -4,6 +4,7 @@ import { convertTimeToMessageHistory } from '../../utils/message-history.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { reactionThread } from '../../api/threads.ts';
+import { getUser } from '../../utils/jwt.ts';
 
 const CARD = "container"
 const name = "container"
@@ -11,10 +12,7 @@ export default function ThreadCard(props: Thread) {
     const navigate = useNavigate();
     const {title, content, id, user, likes, views, createdAt, tags, isSaved} = props
     const time = convertTimeToMessageHistory(createdAt);
-    const currentUser: User = {
-        id: localStorage.getItem("userID") ?? '',
-        name: localStorage.getItem("userName") ?? ''
-    }
+    const currentUser: User = getUser();
     const [isSavedCurrent, setIsSavedCurrent] = React.useState(isSaved);
     return (
         <div  
