@@ -31,7 +31,8 @@ export interface Comment {
 }
 export interface User {
     name: string,
-    id: string
+    id: string,
+    jwtToken: string
 }
 
 export interface Tag {
@@ -43,7 +44,8 @@ export interface Tag {
 // Default values : use for error handling 
 export const defaultUser: User = {
     name: "",
-    id: ""
+    id: "",
+    jwtToken: ""
 }
 
 export const defaultThread: Thread = {

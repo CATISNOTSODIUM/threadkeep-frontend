@@ -11,9 +11,10 @@ export default function Register() {
     const navigate = useNavigate();
     const handleRegister = async () => {
         setMessage('')
-        const res = await createUser(username, password);
-        if (res.status != 200) {
-            setMessage("Invalid request. This username might have already been taken.")
+        const userRequest = await createUser(username, password);
+        if (userRequest.error) {
+            setMessage(userRequest.error);
+            return;
         }
         navigate("/signin")
     }

@@ -1,46 +1,67 @@
-import { User } from "../models";
-import {getJWTToken} from "../utils/jwt.ts"
+import { Tag, User } from "../models";
+import { getJWTToken } from "../utils/jwt.ts"
+import { Optional } from "./types.ts";
 const HOST_API = process.env.REACT_APP_BACKEND_API
 
 
-export const tagList = async () => {
+export async function tagList(): Promise<Optional<Tag[]>> {
     try {
         const response = await fetch(`${HOST_API}/threads/tags`, {
-            method: "GET",
+            method: 'GET',
             headers: {
-                "Authorization": `Bearer ${getJWTToken()}`,
-            },
-        }).then((res) => res.json())
-        .then((data) => data.payload.data)
-        .catch((e) => {console.error(e)})
-        return response
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getJWTToken()}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return {
+            data: data.payload.data,
+            error: null
+        };
+
     } catch (error) {
-        console.error("Error in retrieving tag list", error);
+        return {
+            data: [],
+            error: error instanceof Error ? error.message : String(error)
+        };
     }
 }
 
-export const getThreadTags = async (user: User, threadID: string) => {
+
+export async function getThreadTags(
+    threadID: string
+): Promise<Optional<Tag[]>> {
     try {
         const response = await fetch(`${HOST_API}/threads/tags`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${getJWTToken()}`,
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getJWTToken()}`
             },
             body: JSON.stringify({
-               threadID: threadID
-            }),
-        }).then((res) => {
-            if (res.status === 200) {
-                return res.json()
-                    .then((data) => data.payload.data)
-                    .catch((e) => {console.error(e)})
-            } else {
-                return null
-            }
-        })
-        return response
+                threadID: threadID
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return {
+            data: data.payload.data,
+            error: null
+        };
+
     } catch (error) {
-        console.error("Error in retrieving thread", error);
+        return {
+            data: [],
+            error: error instanceof Error ? error.message : String(error)
+        };
     }
 }

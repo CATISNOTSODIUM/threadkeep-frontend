@@ -345,7 +345,7 @@ export async function updateComment(
     content: string
 ): Promise<Optional<boolean>> {
     try {
-        const response = await fetch(`${HOST_API}/threads/update`, {
+        const response = await fetch(`${HOST_API}/comments/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -414,7 +414,7 @@ export async function deleteComment(
     user: User,
 ): Promise<Optional<boolean>> {
     try {
-        const response = await fetch(`${HOST_API}/threads/delete`, {
+        const response = await fetch(`${HOST_API}/comments/delete`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

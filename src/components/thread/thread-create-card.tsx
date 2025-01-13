@@ -4,7 +4,6 @@ import { Tag, User } from '../../models/index.ts';
 import { createNewThread } from '../../api/threads.ts';
 import MultipleSelectChip from '../common/multiple-select.tsx';
 import { tagList } from '../../api/tags.ts';
-import { Pagination } from '../common/pagination.tsx';
 
 export default function ThreadCreateCard() {
     const user: User = {
@@ -15,20 +14,25 @@ export default function ThreadCreateCard() {
     const [isToggle, setIsToggle] = React.useState(false);
     const [threadTitle, setThreadTitle] = React.useState("");
     const [threadContent, setThreadContent] = React.useState("");
-    const [selectedTags, setSelectedTags] = React.useState<Tag[]>([])
+    const [selectedTags, setSelectedTags] = React.useState<number[]>([])
 
     // message status
     const [message, setMessage] = React.useState("At this stage, only image URLs are allowed.")
     const fetchTags = async () => {
-        const res = await tagList(); // res is an array
+        const tagsRequest = await tagList(); // res is an array
+        if (tagsRequest.error) {
+            setMessage(tagsRequest.error)
+            return;
+        }
         try {
             const tmp = {}
-            res.forEach(tag => {
+            tagsRequest.data.forEach(tag => {
                 tmp[tag.name] = tag
             });
             setTagsDict(tmp)
         } catch (e) {
-            console.log(e)
+            setMessage(e);
+            return;
         }
         
         

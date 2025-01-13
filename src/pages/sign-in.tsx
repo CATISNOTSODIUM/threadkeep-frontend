@@ -12,9 +12,9 @@ export default function SignIn() {
 
     const handleSignIn = async () => {
         setMessage('')
-        const res = await verifyUser(username, password);
-        if (res === false) {
-            setMessage("Invalid request. Invalid username or password")
+        const userRequest = await verifyUser(username, password);
+        if (userRequest.error) {
+            setMessage(userRequest.error)
         } else {
             navigate("/threads")
         }
