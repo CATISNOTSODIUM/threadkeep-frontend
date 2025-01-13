@@ -19,8 +19,8 @@ import {
 } from '@dnd-kit/sortable';
 
 import {CSS} from '@dnd-kit/utilities';
-import { ThreadSimplified, User } from '../../models/index.ts';
-import { reactionThread, ReactionType, threadList } from '../../api/threads.ts';
+import { ThreadSimplified } from '../../models/index.ts';
+import { threadList } from '../../api/threads.ts';
 import { truncateBody } from '../../utils/truncate-body.ts';
 import { mergeContent, saveMarkdownAsMD, saveMarkdownAsRawText } from '../../utils/save-markdown.ts';
 import PreviewModal from './preview-modal.tsx';
@@ -213,11 +213,6 @@ function SortableItem(props) {
     transition,
   };
   const {title, content, threadID} = props.id
-  const {triggerRefresh} = props
-  const currentUser: User = {
-    id: localStorage.getItem("userID") ?? '',
-    name: localStorage.getItem("userName") ?? ''
-  }
   const navigate = useNavigate();
   return (
     <div ref={setNodeRef}  style={style} {...listeners} {...attributes}>
@@ -246,16 +241,3 @@ function SortableItem(props) {
     </div>
   );
 }
-
-
-/*
- <div 
-              className='absolute -top-2 -right-2 text-2xl hover:animate-ping'
-              onClick={async () => {
-                await reactionThread(currentUser, threadID, ReactionType.UNSAVE) // unsave thread
-                await triggerRefresh();
-              }}
-            >
-              {"☒"}
-            </div>
-*/

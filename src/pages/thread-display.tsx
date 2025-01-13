@@ -11,6 +11,7 @@ import CommentsCreateCard from '../components/comment/comment-create-card.tsx';
 import ThreadDisplayCardSkeleton from '../components/thread/thread-display-card-skeleton.tsx'
 import ThreadEditModal from '../components/thread/thread-edit.tsx';
 import { isVerified } from '../utils/isVerified.ts';
+import { getUser } from '../utils/jwt.ts';
 
 
 export default function ThreadDisplay() { // fix: remove
@@ -31,10 +32,7 @@ function ThreadDisplayHandler() {
     const [currentLike, setCurrentLike] = React.useState(0)
     const [isToggleLike, setIsToggleLike] = React.useState(false) 
     const [isEditThread, setIsEditThread] = React.useState(false)
-    const currentUser: User = {
-        id: localStorage.getItem("userID") ?? '',
-        name: localStorage.getItem("userName") ?? ''
-    }
+    const currentUser: User = getUser()
     const navigate = useNavigate();
     const fetchThread = async () => {
         const threadID = searchParams.get('id')
@@ -66,7 +64,7 @@ function ThreadDisplayHandler() {
             if (threadID) reactionThread(currentUser, threadID, ReactionType.VIEW)
         }, [isEditThread]);
 
-    const {title, content, id, user, tags, views, createdAt} = thread ?? {}
+    const {title, content, id, user, tags, createdAt} = thread ?? {}
     const time = convertTimeToMessageHistory(createdAt);
 
     
