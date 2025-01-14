@@ -15,3 +15,9 @@ export const getUser: () => User = () => (
         jwtToken: localStorage.getItem("jwtToken") ?? ''
     }
 )
+
+export const removeUser = () => {
+    localStorage.removeItem("userID");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("jwtToken");
+}
