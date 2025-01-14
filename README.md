@@ -93,6 +93,11 @@ By toggling the tool button, you can filter the type of information you want to 
 - Saving filtered data as PDF file `.pdf`.
 - Refactor the entire application using `redux` framework
 
+# Issues
+## Cannot retrieve data from database
+This error occurs when frontend cannot fetch data from the backend. This is due to several reasons.
+- **Missing JWT Token**: I'd recommend you to log out from the forum and sign in again.
+- **Database server is down**: please check your database according to your `DATABASE_URL`.
 
 # Acknowledgement
 First of all, thank you for this CVWO winter assignment. It has helped me learn essential programming concepts and become familiar with web development frameworks step by step throughout the guide

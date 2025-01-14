@@ -29,6 +29,9 @@ const authSlice = createSlice( {
             state.name = null
             state.id = null
             state.jwtToken = null
+            Cookies.set('name', '');
+            Cookies.set('id', '');
+            Cookies.set('jwtToken', '');
         }
     }
 })

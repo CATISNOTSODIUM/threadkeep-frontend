@@ -1,33 +1,64 @@
-import React from 'react';
-import NavBar from '../components/common/nav-bar.tsx'
-import SideBar from '../components/common/side-bar.tsx'
-import ThreadCard from '../components/thread/thread-card.tsx';
-import ThreadCreateCard from '../components/thread/thread-create-card.tsx';
-import { countThread, threadList } from '../api/threads.ts';
-import { Thread } from '../models/index.ts';
-import { Pagination } from '../components/common/pagination.tsx';
-import SearchFilterHandler from '../components/common/search-filter.tsx';
-import { getID } from '../utils/getReduxState.ts';
-
+import React from "react";
+import NavBar from "../components/common/nav-bar.tsx";
+import SideBar from "../components/common/side-bar.tsx";
+import ThreadCard from "../components/thread/thread-card.tsx";
+import ThreadCreateCard from "../components/thread/thread-create-card.tsx";
+import { countThread, threadList } from "../api/threads.ts";
+import { Thread } from "../models/index.ts";
+import { Pagination } from "../components/common/pagination.tsx";
+import { useNavigate } from "react-router-dom";
+import SearchFilterHandler from "../components/common/search-filter.tsx";
+import { getID } from "../utils/getReduxState.ts";
 
 export default function Threads() {
-  const [ThreadList, setThreadList] = React.useState<Thread[]>([])
-  const [savedThreadIDList, setSavedThreadIDList] = React.useState<String[]>([])
-  const [pageNumber, setPageNumber] = React.useState(1)
-  const [totalThreads, setTotalThreads] = React.useState(0)
+  const navigate = useNavigate();
+  const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
+  const [savedThreadIDList, setSavedThreadIDList] = React.useState<String[]>(
+    []
+  );
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [totalThreads, setTotalThreads] = React.useState(0);
+  const [message, setMessage] = React.useState("");
   const [filter, setFilter] = React.useState({});
   const userID = getID();
   const threadsPerPage = 7;
   const fetchThread = async () => {
-    const threads = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter);
-    const _savedThreadIDList = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter, userID ?? '') ?? []; 
-    setSavedThreadIDList(_savedThreadIDList.map(thread => thread.id));
-    setThreadList(threads);
-  }
+    setMessage("Pending ...");
+    const threadsRequest = await threadList(
+      (pageNumber - 1) * threadsPerPage,
+      threadsPerPage,
+      filter
+    );
+    console.log(threadsRequest)
+    if (!threadsRequest.error) {
+      setThreadList(threadsRequest.data);
+    } else {
+      setMessage(threadsRequest.error);
+      return;
+    }
+
+    const savedThreadIDListRequest = await threadList(
+      (pageNumber - 1) * threadsPerPage,
+      threadsPerPage,
+      filter,
+      userID ?? ""
+    );
+    if (!savedThreadIDListRequest.error) {
+      setSavedThreadIDList(
+        savedThreadIDListRequest.data.map((thread) => thread.id)
+      );
+    } else {
+      setMessage(savedThreadIDListRequest.error);
+      return;
+    }
+
+    setMessage("");
+  };
 
   const initPagination = async () => {
-    setTotalThreads(await countThread())
-  }
+    const countThreadRequest = await countThread();
+    setTotalThreads(countThreadRequest.data);
+  };
 
   React.useEffect(
     () => {
@@ -60,10 +91,13 @@ export default function Threads() {
                     ) : <div>cannot load threads</div>
                   }
             </div>
-            
         </div>
-        <Pagination threadsPerPage={threadsPerPage} totalThreads={totalThreads} currentPageNumber={pageNumber} paginate={(pageNumber) => setPageNumber(pageNumber)}/>
+      <Pagination
+        threadsPerPage={threadsPerPage}
+        totalThreads={totalThreads}
+        currentPageNumber={pageNumber}
+        paginate={(pageNumber) => setPageNumber(pageNumber)}
+      />
     </div>
   );
 }
-

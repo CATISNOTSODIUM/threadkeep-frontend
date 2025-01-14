@@ -7,7 +7,7 @@ export default function RequireAuth() {
     const token = useSelector(selectCurrentjwtToken);
     const location = useLocation();
     return (
-        token 
+        (token) 
         ? <Outlet/>
         : <Navigate to="/signin" state={{from: location}} replace/>
     )
