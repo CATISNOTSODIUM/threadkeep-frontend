@@ -1,5 +1,5 @@
+import { getJWTToken } from "./getReduxState.ts";
+
 export const isVerified = () => {
-    // cheap verification system
-    if (!localStorage.getItem('userID')) return false;
-    return true;
+    return getJWTToken() != '';
 }
