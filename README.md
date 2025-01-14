@@ -17,8 +17,10 @@ This project aims to solve this problem by integrating a built-in data retrieval
 
 ## Tech Stack
 - **Programming Language**: TypeScript
-- **Third-party Libraries**: React, [dnd-kit](https://dndkit.com/) for drag and drop components,  [react-markdown-editor](https://uiwjs.github.io/react-markdown-editor/) 
+- **Third-party Libraries**: React, [dnd-kit](https://dndkit.com/) for drag and drop components,  [react-markdown-editor](https://uiwjs.github.io/react-markdown-editor/), `reduxjs/toolkit` for Redux development.
 - **Styling**: Tailwind CSS, Material UI
+
+Currently, Redux is only handling user authentication. The codebase will be expanded to use Redux more extensively when I have available time.
 
 # Table of contents
 - [ThreadKeep ⬢ - Your personal archive for online conversations.](#threadkeep----your-personal-archive-for-online-conversations)
@@ -46,6 +48,7 @@ If you have already hosted your backend, please replace `REACT_APP_BACKEND_API` 
 ```bash
 NODE_PATH=./src
 REACT_APP_BACKEND_API="http://localhost:8080"
+COOKIE_EXPIRATION_DAY=7 # for JWT authentication
 ```
 ## Building and Running the App Locally
 To start a local development server, make sure to install the required dependencies by running `npm install`. Then, you can start the local server by executing `npm start`.
@@ -58,6 +61,9 @@ There are many deployment options we can choose. Personally, I use [Vercel](http
 **ThreadKeep** is designed to be easy to use, with complete CRUD operation and its ability to save threads and retrieve information from them. Here is the basic user guide.
 ## Account Registeration
 After visiting the landing page, click on the `Sign In / Register` button to sign in or create a new account. If you're new to ThreadKeep, this web forum authenticates users based solely on their usernames. You can optionally enter a password for added security. Note that you must sign in to view other pages. After you have signed in, you will be redirected to `/threads` page.
+
+ThreadKeep uses `JWT Token` to verify user while temporarily store user information as cookies. By default, the cookie will expire in 7 days. However, you can configure the cookie expiration date from one of the environment variables `COOKIE_EXPIRATION_DAY`.
+
 ## Threads Management
 ### Create threads
 To create a new thread, simply click the `CREATE` button. Each thread requires a title and a description.
@@ -85,7 +91,7 @@ By toggling the tool button, you can filter the type of information you want to 
 - Support multilayed comments
 - Support saving comments
 - Saving filtered data as PDF file `.pdf`.
-- Refactor the application by using `redux`
+- Refactor the entire application using `redux` framework
 
 # Issues
 ## Cannot retrieve data from database
