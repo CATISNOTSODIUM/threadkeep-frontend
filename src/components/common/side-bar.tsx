@@ -25,15 +25,14 @@ import { truncateBody } from '../../utils/truncate-body.ts';
 import { mergeContent, saveMarkdownAsMD, saveMarkdownAsRawText } from '../../utils/save-markdown.ts';
 import PreviewModal from './preview-modal.tsx';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { isVerified } from '../../utils/isVerified.ts';
+import { getID, getName } from '../../utils/getReduxState.ts';
 
 export default function SideBar({spanPage=false}) {
     const navigate = useNavigate();
-    if (!isVerified()) navigate("/signin");
     const [isToggle, setIsToggle] = React.useState(spanPage);
 
-    const name = localStorage.getItem("userName");
-    const userID = localStorage.getItem("userID");
+    const name = getName();
+    const userID = getID();
     const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
     const fetchThread = async () => {
         const threads = await threadList(0, 10, {}, userID ?? "") ?? []; // get saved thread
@@ -79,7 +78,7 @@ export default function SideBar({spanPage=false}) {
         <div className={`font-bold ${spanPage ? "text-4xl" : "text-xl"}`}>Profile</div>
         <div className='bg-white/60 rounded-xl py-2'>
             <div className={`font-bold ${spanPage ? "text-2xl" : "text-sm"}`}>
-              {"Username: " + name?.toUpperCase()}
+              {"Username: " + name}
             </div>
             <div className='text-xs text-gray-500'>{userID}</div>
             

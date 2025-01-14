@@ -4,21 +4,19 @@ import SideBar from '../components/common/side-bar.tsx'
 import ThreadCard from '../components/thread/thread-card.tsx';
 import ThreadCreateCard from '../components/thread/thread-create-card.tsx';
 import { countThread, threadList } from '../api/threads.ts';
-import { Thread, User } from '../models/index.ts';
+import { Thread } from '../models/index.ts';
 import { Pagination } from '../components/common/pagination.tsx';
-import { isVerified } from '../utils/isVerified.ts';
-import { useNavigate } from 'react-router-dom';
 import SearchFilterHandler from '../components/common/search-filter.tsx';
+import { getID } from '../utils/getReduxState.ts';
 
 
 export default function Threads() {
-  const navigate = useNavigate();
   const [ThreadList, setThreadList] = React.useState<Thread[]>([])
   const [savedThreadIDList, setSavedThreadIDList] = React.useState<String[]>([])
   const [pageNumber, setPageNumber] = React.useState(1)
   const [totalThreads, setTotalThreads] = React.useState(0)
   const [filter, setFilter] = React.useState({});
-  const userID = localStorage.getItem("userID");
+  const userID = getID();
   const threadsPerPage = 7;
   const fetchThread = async () => {
     const threads = await threadList((pageNumber - 1) * threadsPerPage, threadsPerPage, filter);
@@ -33,19 +31,12 @@ export default function Threads() {
 
   React.useEffect(
     () => {
-      if (!isVerified()) {
-        navigate("/signin");
-        return;
-      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       fetchThread()
       initPagination()
     }, [pageNumber, filter]
   )
 
-  if (!isVerified()) {
-    return <div></div>
-  }
   return (
     <div >
         <NavBar/>
@@ -65,7 +56,7 @@ export default function Threads() {
                       return thread;
                     }).map((thread) => 
                       thread &&
-                      <ThreadCard {...(thread as object as Thread)}/>
+                      <ThreadCard key={thread.id} {...(thread as object as Thread)}/>
                     ) : <div>cannot load threads</div>
                   }
             </div>

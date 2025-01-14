@@ -1,5 +1,5 @@
 import { Tag, User } from "../models";
-import {getJWTToken} from "../utils/jwt.ts"
+import {getJWTToken} from "../utils/getReduxState.ts"
 const HOST_API = process.env.REACT_APP_BACKEND_API
 
 
