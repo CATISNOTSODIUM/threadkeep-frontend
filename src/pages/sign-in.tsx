@@ -32,7 +32,6 @@ export default function SignIn() {
             setPassword('');
             navigate("/threads")
         } catch (error) {
-            console.log(error);
             if (!error?.response) {
                 setMessage("Cannot connect to server");
             } else if (error.response?.status === 400) {
