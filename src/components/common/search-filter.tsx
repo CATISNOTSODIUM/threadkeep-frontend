@@ -2,6 +2,9 @@ import React from "react";
 import MultipleSelectChip from "./multiple-select.tsx";
 import { Tag } from "../../models/index.ts";
 import { tagList } from "../../api/tags.ts";
+import { InputGroup, Input, InputLeftAddon, HStack } from "@chakra-ui/react"
+
+
 export default function SearchFilterHandler({ setFilter }) {
   const [name, setName] = React.useState("");
   const [tagsDict, setTagsDict] = React.useState<{ [name: string]: Tag }>({});
@@ -36,7 +39,19 @@ export default function SearchFilterHandler({ setFilter }) {
     fetchTags();
   }, []);
   return (
-    <div className="flex flex-row content-center px-3 mb-5 ">
+    <HStack>
+      <InputGroup className="py-2 max-w-96">
+        <InputLeftAddon>Title</InputLeftAddon>
+        <Input placeholder='Your title' />
+      </InputGroup>
+      <MultipleSelectChip/>
+    </HStack>
+  );
+}
+
+/*
+
+<div className="flex flex-row content-center px-3 mb-5 ">
       <input
         id="title"
         onChange={(e) => setName(e.target.value)}
@@ -49,5 +64,4 @@ export default function SearchFilterHandler({ setFilter }) {
         setSelectedTag={setSelectedTags}
       />
     </div>
-  );
-}
+  */

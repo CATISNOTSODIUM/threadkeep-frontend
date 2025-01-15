@@ -41,7 +41,7 @@ export default function SideBar({ spanPage = false }) {
   const [ThreadList, setThreadList] = React.useState<ThreadSimplified[]>([]);
   const fetchThread = async () => {
     const threadsRequest = await threadList(0, 10, {}, userID ?? "");
-    if (!threadsRequest.error) {
+    if (!threadsRequest.error && threadsRequest.data !== undefined) {
       const threadListSimplified = threadsRequest.data.map((thread) => ({
         threadID: thread.id,
         title: thread.title,

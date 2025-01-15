@@ -1,12 +1,26 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
-
+import {
+  Select,
+} from "chakra-react-select";
+export default function MultipleSelectChip() {
+  return (
+    <Select
+      tagColorScheme="teal"
+      options={[
+        {
+          label: "I am red",
+          value: "i-am-red",
+          colorPalette: "red", // The option color palette overrides the global
+        },
+        {
+          label: "I fallback to purple",
+          value: "i-am-purple",
+        },
+      ]}
+    />
+  );
+}
+/*
 const ITEM_HEIGHT = 24;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -60,3 +74,4 @@ export default function MultipleSelectChip({
     </FormControl>
   );
 }
+*/

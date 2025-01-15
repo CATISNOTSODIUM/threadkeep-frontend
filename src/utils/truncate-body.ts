@@ -31,3 +31,40 @@ export const truncateBody = (
 
   return content.slice(0, maxCharacter) + "...";
 };
+
+function extractUrlFromMDImage(text: string): string[] {
+  // Regular expressions for different URL patterns
+  const patterns = {
+    // Matches markdown image syntax: ![alt](url)
+    markdownImage: /!\[.*?\]\((.*?)\)/,
+    // Matches plain URLs
+    plainUrl: /(https?:\/\/[^\s,]+)/g
+  };
+
+  const urls = new Set<string>();
+
+  // Extract URL from markdown image syntax
+  const markdownMatch = text.match(patterns.markdownImage);
+  if (markdownMatch && markdownMatch[1]) {
+    urls.add(markdownMatch[1]);
+  }
+
+  // Extract plain URLs
+  const plainMatches = text.match(patterns.plainUrl);
+  if (plainMatches) {
+    plainMatches.forEach(url => urls.add(url));
+  }
+
+  return Array.from(urls);
+}
+
+export function extractFirstImageUrl(content: string): string  {
+  const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g;
+  const allImages = [...content.matchAll(imageRegex)];
+  if (allImages.length === 0) {
+    return '';
+  } else {
+    const res = extractUrlFromMDImage(allImages[0].toString());
+    return res.length === 0 ? '' : res[0];
+  }
+}
