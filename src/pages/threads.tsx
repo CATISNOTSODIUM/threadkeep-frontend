@@ -24,18 +24,6 @@ export default function Threads() {
   const threadsPerPage = 7;
   const fetchThread = async () => {
     setMessage("Pending ...");
-    const threadsRequest = await threadList(
-      (pageNumber - 1) * threadsPerPage,
-      threadsPerPage,
-      filter
-    );
-    console.log(threadsRequest)
-    if (!threadsRequest.error) {
-      setThreadList(threadsRequest.data);
-    } else {
-      setMessage(threadsRequest.error);
-      return;
-    }
 
     const savedThreadIDListRequest = await threadList(
       (pageNumber - 1) * threadsPerPage,
@@ -43,12 +31,25 @@ export default function Threads() {
       filter,
       userID ?? ""
     );
-    if (!savedThreadIDListRequest.error) {
+    if (!savedThreadIDListRequest.error && savedThreadIDListRequest.data !== undefined) {
       setSavedThreadIDList(
         savedThreadIDListRequest.data.map((thread) => thread.id)
       );
     } else {
-      setMessage(savedThreadIDListRequest.error);
+      setMessage(savedThreadIDListRequest.error ?? '');
+      return;
+    }
+
+    const threadsRequest = await threadList(
+      (pageNumber - 1) * threadsPerPage,
+      threadsPerPage,
+      filter
+    );
+    if (!threadsRequest.error) {
+
+      setThreadList(threadsRequest.data);
+    } else {
+      setMessage(threadsRequest.error);
       return;
     }
 
@@ -74,10 +75,9 @@ export default function Threads() {
         <div className='flex flex-row  overflow-y-scroll overflow-x-hidden  mx-4 md:mx-36 lg:mx-48  gap-10'>
             <SideBar />
             <div className='flex flex-col w-full h-[75vh] mt-24'>
-                <ThreadCreateCard/>
                 <div className='text-3xl font-bold'>All Threads</div>
                 <hr className='mt-2 mb-4'/>
-                <SearchFilterHandler setFilter={setFilter}/>
+                  <SearchFilterHandler setFilter={setFilter}/>
                   {
                     ThreadList ?
                     ThreadList
@@ -89,7 +89,7 @@ export default function Threads() {
                       thread &&
                       <ThreadCard key={thread.id} {...(thread as object as Thread)}/>
                     ) : <div>cannot load threads</div>
-                  }
+                 }
             </div>
         </div>
       <Pagination

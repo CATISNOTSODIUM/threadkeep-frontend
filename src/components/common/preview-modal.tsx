@@ -2,6 +2,8 @@
 import * as React from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { filterContent } from "../../utils/save-markdown.ts";
+import { Button, Modal, ModalContent, ModalOverlay, Tooltip, useDisclosure } from "@chakra-ui/react";
+
 
 export default function PreviewModal(props: {
   markdownContent: string;
@@ -9,19 +11,21 @@ export default function PreviewModal(props: {
   filterStatus: any;
 }) {
   const { markdownContent, setIsToggle, filterStatus } = props;
-
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
-    <div
-      data-color-mode="light"
-      className="z-50 fixed top-[16vh] h-[70vh] left-[16vw] w-[70vw] p-10 bg-white rounded-xl shadow-xl "
-    >
-      <button
-        className="sticky top-0 text-right bg-gray-100 font-bold rounded-full px-3 hover:text-red-700 hover:bg-red-200"
-        onClick={() => setIsToggle(false)}
-      >
-        {"Close ×"}
-      </button>
-      <MDEditor.Markdown
+    <>
+    <Button onClick={onOpen} colorScheme="yellow" variant={"outline"} size="sm">
+      <Tooltip label='Preview' placement="right-end">
+          Preview
+      </Tooltip>
+    </Button>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="3xl" scrollBehavior="inside">
+      <ModalOverlay />
+      <ModalContent className="p-10">
+        <Button onClick={onClose} variant={"outline"} colorScheme="red" className="w-fit">
+          Close
+        </Button>
+        <MDEditor.Markdown
         className="w-full my-1 h-3/4 overflow-scroll py-2"
         source={filterContent(markdownContent, filterStatus)}
         style={{
@@ -29,6 +33,8 @@ export default function PreviewModal(props: {
           backgroundColor: "inherit",
         }}
       />
-    </div>
-  );
+      </ModalContent>
+    </Modal>
+    </>
+  )
 }

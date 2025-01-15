@@ -1,57 +1,80 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Flex,
+  HStack,
+  IconButton,
+  useDisclosure,
+  Stack,
+} from '@chakra-ui/react'
+import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
+
+
+const Links = ["Home", "Threads", "Profile"];
+const Urls = ["/", "/threads", "/profile"];
+const NavLink = ({index, navigate}) => {
+  return (
+    <Box
+      as="a"
+      px={2}
+      py={1}
+      rounded={'md'}
+      _hover={{
+        textDecoration: 'none',
+        bg: 'gray.700',
+      }}
+      onClick={() => navigate(Urls[index])}
+      className="cursor-pointer"
+    >
+      {Links[index]}
+    </Box>
+  )
+}
 
 export default function NavBar() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = React.useState(false);
-  const tabs = ["Home", "Threads", "Profile"];
-  const url = ["/", "/threads", "/profile"];
   return (
-    <nav className="bg-black text-white fixed w-full z-50 top-0 start-0 border-b flex items-center justify-between flex-wrap p-6">
-      <div className="flex items-center flex-shrink-0 text-white mr-6 lg:mr-72">
-        <button onClick={() => navigate("/")} className="flex items-center">
-          <span id="logo" className="self-center text-2xl whitespace-nowrap ">
-            ThreadKeep ⬢
-          </span>
-        </button>
-      </div>
-      <div className="block">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center px-3 py-2 rounded "
-        >
-          <svg
-            className={`fill-current h-3 w-3 ${isOpen ? "hidden" : "block"}`}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-          </svg>
-          <svg
-            className={`fill-current h-3 w-3 ${isOpen ? "block" : "hidden"}`}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
-          </svg>
-        </button>
-      </div>
+    <div className="fixed w-full z-50 top-0 start-0 text-white">
+      <Box bg='gray.900' px={4}>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+          <IconButton
+            size={'md'}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={'Open Menu'}
+            display={{ md: 'none' }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          <HStack spacing={8} alignItems={'center'}>
+            <Box>
+              <div 
+                className="text-2xl lg:text-3xl my-3 text-wrap cursor-pointer" id="logo"
+                onClick={() => navigate("/")}
+              >
+                ThreadKeep ⬢{" "}
+              </div>
+            </Box>
+            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
+              {Links.map((_, index) => (
+                <NavLink index={index} navigate={navigate}/>
+              ))}
+            </HStack>
+          </HStack>
 
-      <div
-        className={` w-full block flex-grow ${isOpen ? "block" : "hidden"} `}
-      >
-        <div className="text-sm w-full justify-end">
-          {tabs.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => navigate(url[index])}
-              className="block text-base mt-4  text-white-200 mr-48"
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
-    </nav>
-  );
+        </Flex>
+
+        {isOpen ? (
+          <Box pb={4} display={{ md: 'none' }}>
+            <Stack as={'nav'} spacing={4}>
+              {Links.map((_,index) => (
+                <NavLink index={index} navigate={navigate}/>
+              ))}
+            </Stack>
+          </Box>
+        ) : null}
+      </Box>
+    </div>
+  )
 }
+

@@ -2,9 +2,17 @@ import React from "react";
 import MultipleSelectChip from "./multiple-select.tsx";
 import { Tag } from "../../models/index.ts";
 import { tagList } from "../../api/tags.ts";
+import { InputGroup, Input, InputLeftAddon, HStack, Box } from "@chakra-ui/react"
+import ThreadCreateCard from "../thread/thread-create-card.tsx";
+
+
+interface TagDictType {
+  label: string;
+  value: string;
+}
 export default function SearchFilterHandler({ setFilter }) {
   const [name, setName] = React.useState("");
-  const [tagsDict, setTagsDict] = React.useState<{ [name: string]: Tag }>({});
+  const [tagsDict, setTagsDict] = React.useState<TagDictType[]>([]);
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
 
   const fetchTags = async () => {
@@ -13,8 +21,12 @@ export default function SearchFilterHandler({ setFilter }) {
       return;
     }
     try {
-      const tmp = {};
+      const tmp: TagDictType[] = [];
+      
       tagsRequest.data.forEach((tag) => {
+        tmp.push({
+          label: tag.name, value: tag.name
+        })
         tmp[tag.name] = tag;
       });
       setTagsDict(tmp);
@@ -29,25 +41,32 @@ export default function SearchFilterHandler({ setFilter }) {
       name: name,
     });
   };
+
   React.useEffect(() => {
     onSubmitHandler();
   }, [selectedTags, name]);
+  
   React.useEffect(() => {
     fetchTags();
   }, []);
   return (
-    <div className="flex flex-row content-center px-3 mb-5 ">
-      <input
-        id="title"
-        onChange={(e) => setName(e.target.value)}
-        className="block p-2.5 w-3/4 lg:w-1/2 mx-5 text-sm text-gray-700 bg-gray-50 rounded-lg border"
-        placeholder="Search by name"
-      />
-      <MultipleSelectChip
-        tags={Object.keys(tagsDict)}
-        selectedTag={selectedTags}
-        setSelectedTag={setSelectedTags}
-      />
+    <div className="flex gap-2 flex-col md:flex-row content-center my-2">
+      <ThreadCreateCard/>
+      <InputGroup className="max-w-96">
+        <InputLeftAddon>Title</InputLeftAddon>
+        <Input placeholder='Your title' value={name} onChange={(e) => setName(e.target.value)}/>
+      </InputGroup>
+      <div className="max-w-96">
+        <MultipleSelectChip 
+          tagOptions={tagsDict}
+          setSelectedTags={setSelectedTags}
+        />
+      </div>
+      
     </div>
   );
 }
+/*
+
+
+*/

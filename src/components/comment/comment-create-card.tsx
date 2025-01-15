@@ -3,6 +3,7 @@ import MarkdownHandler from "../common/markdown-editor.tsx";
 import { User } from "../../models/index.ts";
 import { createNewComment } from "../../api/threads.ts";
 import { getUser } from "../../utils/jwt.ts";
+import { Button } from "@chakra-ui/react";
 
 export default function CommentsCreateCard(props: {
   threadID: string;
@@ -29,12 +30,13 @@ export default function CommentsCreateCard(props: {
   };
   return (
     <div className="flex flex-col w-full text-left gap-2 duration-200">
-      <button
-        className="block mb-2 text-base bg-yellow-300 hover:bg-yellow-400 text-black rounded-full px-5 text-left w-fit py-2 "
+      <Button
+        colorScheme="yellow"
+        className="w-fit"
         onClick={() => setIsToggle(!isToggle)}
       >
         Reply ✉️
-      </button>
+      </Button>
       {isToggle && (
         <>
           <div className="text-sm text-red-600">{message}</div>
@@ -45,13 +47,14 @@ export default function CommentsCreateCard(props: {
           <div className="text-xs text-gray-400">
             At this stage, only image URLs are allowed.
           </div>
-          <button
-            className="bg-black text-white py-2 rounded-xl"
+          <Button
+            colorScheme="blue"
+            variant={"outline"}
+            className="w-fit"
             onClick={onSubmit}
           >
             SUBMIT
-          </button>
-          <hr className="my-4" />
+          </Button>
         </>
       )}
     </div>
