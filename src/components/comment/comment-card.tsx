@@ -39,7 +39,7 @@ export default function CommentCard(props: Comment) {
           </div>
         )}
       </div>
-      <div className="text-sm py-3">
+      <div className="text-sm py-3" data-color-mode="light">
         <MDEditor.Markdown
           className="w-full my-1 h-fit"
           source={content}

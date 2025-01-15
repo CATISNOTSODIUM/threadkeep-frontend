@@ -4,7 +4,7 @@ import rehypeSanitize from "rehype-sanitize";
 
 export default function MarkdownHandler({ content, setContent }) {
   return (
-    <div>
+    <div data-color-mode="light">
       <MDEditor
         value={content}
         onChange={setContent}

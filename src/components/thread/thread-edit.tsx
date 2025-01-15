@@ -75,6 +75,7 @@ export default function ThreadEditModal(props: { threadProps: Thread }) {
             content={threadContent}
             setContent={setThreadContent}
           />
+          
           <HStack className="mt-3">
             <Button
               colorScheme="yellow"

@@ -107,7 +107,7 @@ export default function ThreadDisplay() {
                     {"  : "}
                     <span className="font-bold">{time}</span>
                   </div>
-                  
+
                   <div className="text-3xl mb-4 font-bold">{title}</div>
                   <div className="flex flex-row text-base gap-2">
                     <ThreadEditModal threadProps={thread} />
@@ -123,34 +123,38 @@ export default function ThreadDisplay() {
                       <Badge colorScheme="teal">{tag.name}</Badge>
                     ))}
                   </div>
-                  <MDEditor.Markdown
-                    className="w-full my-5 h-fit"
-                    source={content}
-                    style={{ fontFamily: '"inter", sans-serif' }}
-                  />
+                  <div data-color-mode="light">
+                    <MDEditor.Markdown
+                      className="w-full my-5 h-fit"
+                      source={content}
+                      style={{ fontFamily: '"inter", sans-serif' }}
+                    />
+                  </div>
                 </CardBody>
               </Card>
             </div>
-            <Card data-color-mode="light" className="p-5 mt-5">
+            <Card className="p-5 mt-5">
               <HStack>
-                <Button 
-                colorScheme={isToggleLike ? 'red' : 'blackAlpha'} className="my-2 hover:animate-pulse w-fit"
-                onClick={handleLike} 
-                variant={"outline"}
+                <Button
+                  colorScheme={isToggleLike ? "red" : "blackAlpha"}
+                  className="my-2 hover:animate-pulse w-fit"
+                  onClick={handleLike}
+                  variant={"outline"}
                 >
-                  {isToggleLike ? 'Liked' : 'Like'} <Heart className={"w-4 h-4 "}/>
+                  {isToggleLike ? "Liked" : "Like"}{" "}
+                  <Heart className={"w-4 h-4 "} />
                 </Button>
-                <CommentsCreateCard
+
+              </HStack>
+               <CommentsCreateCard
                   threadID={id ?? ""}
                   fetchComments={fetchComments}
                 />
-              </HStack>
               {comments.length > 0 ? (
                 comments?.map((comment) => <CommentCard {...comment} />)
               ) : (
                 <div className="text-gray-500 text-sm py-3">No comments</div>
               )}
-              
             </Card>
           </div>
         )}

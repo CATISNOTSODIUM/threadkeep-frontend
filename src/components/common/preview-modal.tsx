@@ -25,7 +25,8 @@ export default function PreviewModal(props: {
         <Button onClick={onClose} variant={"outline"} colorScheme="red" className="w-fit">
           Close
         </Button>
-        <MDEditor.Markdown
+        <div data-color-mode="light">
+          <MDEditor.Markdown
         className="w-full my-1 h-3/4 overflow-scroll py-2"
         source={filterContent(markdownContent, filterStatus)}
         style={{
@@ -33,6 +34,7 @@ export default function PreviewModal(props: {
           backgroundColor: "inherit",
         }}
       />
+        </div>
       </ModalContent>
     </Modal>
     </>
