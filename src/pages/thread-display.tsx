@@ -19,19 +19,10 @@ import ThreadDisplayCardSkeleton from "../components/thread/thread-display-card-
 import ThreadEditModal from "../components/thread/thread-edit.tsx";
 import { isVerified } from "../utils/isVerified.ts";
 import { getUser } from "../utils/jwt.ts";
+import { Badge, Card, CardBody, CardHeader, Tooltip } from "@chakra-ui/react";
+
 
 export default function ThreadDisplay() {
-  // fix: remove
-  const navigate = useNavigate();
-  if (!isVerified()) navigate("/signin");
-  return (
-    <Suspense fallback={<ThreadDisplayCardSkeleton />}>
-      <ThreadDisplayHandler />
-    </Suspense>
-  );
-}
-
-function ThreadDisplayHandler() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [thread, setThread] = React.useState<Thread>();
   const [comments, setComments] = React.useState<Comment[]>([]);
@@ -71,7 +62,7 @@ function ThreadDisplayHandler() {
 
   const { title, content, id, user, tags, createdAt } = thread ?? {};
   const time = convertTimeToMessageHistory(createdAt);
-
+  const isEditable = user?.name === currentUser.name;
   const handleDeleteThread = async () => {
     const threadID = searchParams.get("id");
     if (threadID) {
@@ -97,85 +88,65 @@ function ThreadDisplayHandler() {
                   setIsToggle={setIsEditThread}
                 />
               )}
-              <button
-                className={
-                  isToggleLike
-                    ? "min-w-12 max-h-16 text-center align-center content-center bg-yellow-200 hover:bg-gray-200 hover:text-gray-500 text-yellow-600 mr-5 rounded-xl"
-                    : "min-w-12 max-h-16 text-center align-center content-center bg-gray-100 hover:bg-yellow-200 text-gray-500 mr-5 rounded-xl"
-                }
-                onClick={async () => {
-                  const threadID = searchParams.get("id");
-                  if (threadID)
-                    await reactionThread(
-                      currentUser,
-                      threadID,
-                      !isToggleLike ? ReactionType.LIKE : ReactionType.UNLIKE
-                    );
-                  setCurrentLike(currentLike + (isToggleLike ? -1 : 1));
-                  setIsToggleLike(!isToggleLike);
-                }}
-              >
-                <div>{currentLike} ⬢</div>
-              </button>
-              <div className="flex flex-col">
-                <div className="text-base">
-                  {user?.name}
-                  {"  : "}
-                  <span className="font-bold">{time}</span>
-                  {user?.name === currentUser.name && (
-                    <span>
-                      <button
-                        className="text-red-600 ml-3"
-                        onClick={() => setIsEditThread(true)}
-                      >
-                        ✎ Edit{" "}
-                      </button>
-                      <button
-                        className="text-red-600 ml-3"
-                        onClick={handleDeleteThread}
-                      >
-                        🗑 Delete{" "}
-                      </button>
-                    </span>
-                  )}
-                  <div className="text-3xl w-full font-bold text-wrap">
+             
+              <Card className="flex flex-col w-full">
+                <CardBody >
+                  <div className="text-base my-1">
+                    {isEditable ? user?.name + " (You)" : user?.name}
+                    {"  : "}
+                    <span className="font-bold">{time}</span>
+                  </div>
+                  <div className="text-3xl mb-4 font-bold">
                     {title}
                   </div>
-                  <div className="flex flex-row text-xs gap-2 font-mono">
-                    {tags?.map((tag) => {
-                      return (
-                        <div
-                          key={tag.id}
-                          className="w-fit px-2 rounded-full py-1  bg-yellow-200 text-yellow-800"
-                        >
-                          {tag.name}
-                        </div>
-                      );
-                    })}
+                  <div className="flex flex-row text-base gap-2">
+                      <Badge
+                        colorScheme="yellow"
+                        variant={"outline"}
+                        className="cursor-pointer"
+                        onClick={() => setIsEditThread(true)}
+                      >
+                        <Tooltip label='Edit this thread'>
+                          ✎ Edit{" "}
+                        </Tooltip>
+                      </Badge>
+                      <Badge
+                        colorScheme="red"
+                        variant={"outline"}
+                        className="cursor-pointer"
+                        onClick={handleDeleteThread}
+                      >
+                        <Tooltip label='Delete this thread'>
+                          🗑 Delete
+                        </Tooltip>
+                      </Badge>
+                      {tags?.map((tag) => (
+                          <Badge colorScheme="teal">{tag.name}</Badge>
+                      ))}
                   </div>
-                </div>
-              </div>
+                  <MDEditor.Markdown
+                    className="w-full my-5 h-fit"
+                    source={content}
+                    style={{ fontFamily: '"inter", sans-serif' }}
+                  />
+                </CardBody>
+              </Card>
             </div>
-            <div data-color-mode="light">
-              <MDEditor.Markdown
-                className="w-full my-5 h-fit"
-                source={content}
-                style={{ fontFamily: '"inter", sans-serif' }}
-              />
-
-              <hr className="my-3" />
+            <Card data-color-mode="light" className="p-5 mt-5">
               <div className="font-bold text-xl">COMMENTS</div>
               {comments.length > 0 ? (
                 comments?.map((comment) => <CommentCard {...comment} />)
               ) : (
                 <div className="text-gray-500 text-sm py-3">No comments</div>
               )}
-
               <CommentsCreateCard
                 threadID={id ?? ""}
                 fetchComments={fetchComments}
               />
-            </div>
+            </Card>
+              
+
+              
           </div>
         )}
       </div>

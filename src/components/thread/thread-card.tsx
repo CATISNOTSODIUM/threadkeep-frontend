@@ -17,6 +17,7 @@ import {
   Image,
   Stack,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import Heart from "../../assets/heart.tsx";
@@ -48,7 +49,7 @@ export default function ThreadCard(props: Thread) {
       direction={{ base: "column", sm: "row" }}
       variant="outline"
     >
-      <HStack>
+      <HStack className="w-full">
         <VStack className={`relative h-full min-w-36 bg-inherit z-0 text-black justify-center overflow-hidden`}>
           <Image 
             src={extractedFirstImageUrl}
@@ -64,18 +65,16 @@ export default function ThreadCard(props: Thread) {
           <Button 
             colorScheme={(isSavedCurrent ? "yellow" : "blackAlpha")}
             size="sm"
-            className={(
-              isSavedCurrent
-                ? "bg-yellow-50 hover:bg-yellow-100"
-                : "bg-white hover:bg-gray-100"
-            )}
             onClick={saveThread}
           >
-            {isSavedCurrent ? 'Saved' : 'Save'}
+            <Tooltip label={!isSavedCurrent ? 'SAVE?' : 'UNSAVE?'} placement="right-end">
+                {isSavedCurrent ? 'Saved' : 'Save'}
+            </Tooltip>
+            
           </Button>
         </VStack>
         <CardBody
-          className={`cursor-pointer hover:bg-yellow-50 ${isSavedCurrent ? 'bg-yellow-50' : ''}`}
+          className={`w-full cursor-pointer hover:bg-gray-50 ${isSavedCurrent ? 'bg-yellow-50' : ''}`}
           onClick={onClick}
         >
         <Text className="font-bold text-xl">{title}</Text>
@@ -99,73 +98,3 @@ export default function ThreadCard(props: Thread) {
     </Card>
   );
 }
-
-/*
-<div
-      className={
-        "focus:cursor-pointer flex flex-col w-full text-left border-2 border-gray-50 p-5 " +
-        (isSavedCurrent
-          ? "bg-yellow-50 hover:bg-yellow-100"
-          : "bg-white hover:bg-gray-100")
-      }
-    >
-      <button
-        className={
-          "text-xs bg-gray-200 w-fit px-2 my-1 rounded-xl duration-500 " +
-          (isSavedCurrent
-            ? "opacity-100 bg-yellow-200 hover:opacity-20"
-            : "opacity-20 hover:opacity-100")
-        }
-        onClick={async () => {
-          await reactionThread(currentUser, id, isSavedCurrent ? 4 : 3);
-          setIsSavedCurrent(!isSavedCurrent);
-        }}
-      >
-        {isSavedCurrent ? "SAVED" : "SAVE"}
-      </button>
-
-      <button
-        className="text-left"
-        onClick={() => {
-          navigate({
-            pathname: "/thread-display",
-            search: createSearchParams({
-              id: id,
-            }).toString(),
-          });
-        }}
-      >
-        <div className="text-xl font-bold text-gray-950">{title}</div>
-        <div className="text-xs">
-          {user.name}
-          {"  : "}
-          <span className="font-bold">{time}</span>
-          {user.name === currentUser.name && (
-            <button className="text-red-600 ml-3">✎ Edit </button>
-          )}
-        </div>
-
-        <div className="text-xs text-gray-500 py-2">
-          <div className="pr-24 whitespace-pre-wrap">
-            {truncateBody(content, 200)}
-          </div>
-        </div>
-      </button>
-      <div className="flex flex-row text-xs gap-2">
-        {tags.map((tag) => {
-          return (
-            <div
-              key={tag.id}
-              className="w-fit px-2 rounded-full  bg-gray-200 text-gray-800"
-            >
-              {tag.name}
-            </div>
-          );
-        })}
-      </div>
-      <div className="text-sm py-2">
-        {" ⬢ " + likes}
-        {" 👁️‍🗨️ " + views}
-      </div>
-    </div>
-  */

@@ -5,6 +5,7 @@ import MDEditor from "@uiw/react-md-editor";
 import CommentEditModal from "./comment-edit.tsx";
 import { deleteComment } from "../../api/threads.ts";
 import { getUser } from "../../utils/jwt.ts";
+import { Card, Tooltip, Badge } from "@chakra-ui/react";
 
 export default function CommentCard(props: Comment) {
   const { content, id, user, createdAt } = props;
@@ -19,7 +20,7 @@ export default function CommentCard(props: Comment) {
     window.location.reload();
   };
   return (
-    <div className="flex flex-col text-left bg-gray-50 hover:bg-gray-100 rounded-xl  my-3 py-5 px-6">
+    <Card className="flex flex-col text-left bg-gray-50 hover:bg-gray-100 rounded-xl  my-3 py-5 px-6">
       {isToggleEdit && (
         <CommentEditModal commentProps={props} setIsToggle={setIsToggleEdit} />
       )}
@@ -28,17 +29,24 @@ export default function CommentCard(props: Comment) {
         {"  : "}
         <span className="font-bold">{time}</span>
         {user?.name === currentUser.name && (
-          <span>
-            <button
-              className="text-red-600 ml-3"
+          <div className="flex gap-2">
+            <Badge
+              colorScheme="yellow"
+              variant={"outline"}
+              className="cursor-pointer"
               onClick={() => setIsToggleEdit(true)}
             >
-              ✎ Edit{" "}
-            </button>
-            <button className="text-red-600 ml-3" onClick={handleCommentDelete}>
-              🗑 Delete{" "}
-            </button>
-          </span>
+              <Tooltip label="Edit this comment">✎ Edit </Tooltip>
+            </Badge>
+            <Badge
+              colorScheme="red"
+              variant={"outline"}
+              className="cursor-pointer"
+              onClick={handleCommentDelete}
+            >
+              <Tooltip label="Delete this comment">🗑 Delete</Tooltip>
+            </Badge>
+          </div>
         )}
       </div>
       <div className="text-sm py-3">
@@ -51,6 +59,6 @@ export default function CommentCard(props: Comment) {
           }}
         />
       </div>
-    </div>
+    </Card>
   );
 }

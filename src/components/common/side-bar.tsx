@@ -30,11 +30,29 @@ import PreviewModal from "./preview-modal.tsx";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { isVerified } from "../../utils/isVerified.ts";
 import { getUser, removeUser } from "../../utils/jwt.ts";
+import {
+  Badge,
+  Button,
+  Card,
+  CardHeader,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  HStack,
+  Modal,
+  Tooltip,
+  useDisclosure,
+  ModalContent,
+  ModalOverlay,
+  ModalBody
+} from "@chakra-ui/react";
 
-export default function SideBar({ spanPage = false }) {
+export default function SideBar() {
   const navigate = useNavigate();
   if (!isVerified()) navigate("/signin");
-  const [isToggle, setIsToggle] = React.useState(spanPage);
   const currentUser = getUser();
   const name = currentUser.name;
   const userID = currentUser.id;
@@ -57,76 +75,66 @@ export default function SideBar({ spanPage = false }) {
   };
   React.useEffect(() => {
     fetchThread();
-  }, [isToggle]);
+  }, []);
 
-  if (!isToggle) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(undefined);
+
+  if (!isOpen) {
     return (
       <button
-        className="fixed opacity-30 hover:opacity-100 top-0 left-0 z-40 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl"
-        onClick={() => setIsToggle(true)}
+        className="fixed opacity-50 hover:opacity-100 top-0 left-0 z-50 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl"
+        onClick={onOpen}
+        ref={btnRef}
       >
-        {"⚙️ 🔧"}
+        <Tooltip label="Thread Manager 🔧" placement="right-end">
+          {"⚙️ 🔧"}
+        </Tooltip>
       </button>
     );
-  } else {
-    const styleSpanPage = "w-full h-full px-16 lg:px-96";
-    const styleDefault =
-      "border-2 rounded-xl fixed lg:sticky top-24 min-w-64 lg:min-w-96 bg-white  overflow-scroll h-[80vh] rounded-lg p-4 flex flex-col gap-1 z-10";
-    return (
-      <div className={spanPage ? styleSpanPage : styleDefault}>
-        <button className="sticky top-0 right-0 text-right font-bold text-sm">
-          <span
-            className="bg-gray-200 hover:bg-green-300 hover:text-green-800 rounded-full px-3 py-1 mx-1"
-            onClick={() => fetchThread()}
-          >
-            {"  Refresh ↻  "}
-          </span>
-          {!spanPage && (
-            <span
-              className="bg-gray-200  hover:bg-yellow-300 hover:text-yellow-800 rounded-full px-3 py-1 mx-1"
-              onClick={() => setIsToggle(false)}
-            >
-              {"  Close × "}
-            </span>
-          )}
-          <button
-            onClick={logOut}
-            className="text-center w-fit bg-gray-200 hover:bg-red-200 hover:text-red-800 font-bold px-5 my-2 py-1 rounded-full"
-          >
-            Log out{" "}
-          </button>
-        </button>
-        <div className={`font-bold ${spanPage ? "text-4xl" : "text-xl"}`}>
-          Profile
-        </div>
-        <div className="bg-white/60 rounded-xl py-2">
-          <div className={`font-bold ${spanPage ? "text-2xl" : "text-sm"}`}>
-            {"Username: " + name?.toUpperCase()}
-          </div>
-          <div className="text-xs text-gray-500">{userID}</div>
-        </div>
-
-        <Filter ThreadList={ThreadList} />
-        <div
-          className={`h-full ${spanPage ? "h-full" : "max-h-96"} overflow-scroll`}
-        >
-          <hr className="mt-2" />
-          <div className={`p-1 font-bold ${spanPage ? "text-xl" : "text-sm"}`}>
-            Saved Threads
-          </div>
-          <div className="text-xs text-gray-400 p-1">
-            You can swap the order. Make sure to refresh after saving/unsaving
-            threads.
-          </div>
-          <DashboardThread
-            ThreadList={ThreadList}
-            setThreadList={setThreadList}
-            triggerRefresh={fetchThread}
-          />
-        </div>
-      </div>
-    );
   }
+  return (
+    <Drawer
+      isOpen={isOpen}
+      placement="left"
+      onClose={onClose}
+      finalFocusRef={btnRef}
+    >
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerCloseButton />
+        <DrawerHeader>
+          Dashboard 🔥
+          <Card className="p-4">
+            <div className={`font-bold text-xl my-1`}>
+              {name?.toUpperCase()}
+            </div>
+            <HStack>
+              <Button onClick={logOut} variant={"outline"} colorScheme="red">
+                Log out{" "}
+              </Button>
+              <Button onClick={fetchThread} colorScheme="teal">
+                {"  Refresh ↻  "}
+              </Button>
+            </HStack>
+          </Card>
+        </DrawerHeader>
+        <DrawerBody>
+          <Filter ThreadList={ThreadList} />
+          <Card className="mt-1 p-3" variant={"elevated"}>
+            <CardHeader className="font-bold text-xl">
+              Saved threads 💾
+            </CardHeader>
+            <DashboardThread
+              ThreadList={ThreadList}
+              setThreadList={setThreadList}
+              triggerRefresh={fetchThread}
+            />
+          </Card>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  );
 }
 
 function Filter({ ThreadList }) {
@@ -136,86 +144,81 @@ function Filter({ ThreadList }) {
     image: true,
     code: true,
   });
-  const [isToggle, setIsToggle] = React.useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isPreviewToggle, setIsPreviewToggle] = React.useState(false);
   return (
     <div>
-      {!isToggle ? (
-        <button
-          className="bg-gray-200 hover:bg-green-300 hover:text-green-800 rounded-full px-3 mx-1 text-sm"
-          onClick={() => setIsToggle(true)}
-        >
-          Tool 🛠{" "}
-        </button>
-      ) : (
-        <div className="border-2 duration-500 p-3 bg-white rounded-xl my-2 flex flex-col text-sm lg:text-base">
-          <button
-            className=" bg-gray-200 my-2 hover:bg-red-300 hover:text-red-800 rounded-full px-3 text-sm w-fit"
-            onClick={() => setIsToggle(false)}
-          >
-            {"  Close × "}
-          </button>
+      <Button onClick={onOpen} colorScheme="blue">
+        💾 Download
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>
           <div className="font-bold text-xl">Filter</div>
-          <div className="text-xs text-gray-400 my-1">
-            At this stage, our app only supports text, image, and code snippet.
-          </div>
           <div className="flex justify-start gap-3">
             {Object.entries(filterStatus).map(([name, status]) => {
               return (
-                <div
-                  className={
-                    "w-full text-center  rounded-xl px-2 cursor-pointer " +
-                    (status ? "bg-yellow-200" : "bg-gray-100")
-                  }
+                <Button
+                  colorScheme={status ? "yellow" : "blackAlpha"}
                   onClick={() => {
                     let tmpStatus = Object.assign({}, filterStatus);
                     tmpStatus[name] = !tmpStatus[name];
                     setFilterStatus(tmpStatus);
                   }}
+                  size="sm"
                 >
                   {name}
-                </div>
+                </Button>
               );
             })}
           </div>
-          <hr className="my-2" />
-          <div className="font-bold text-xl">Output</div>
-          <div className="flex flex-row gap-3 ">
-            <button
-              className="w-full text-center border-2 rounded-xl px-2"
+          <div className="text-xs text-gray-400 my-1">
+            At this stage, our app only supports text, image, and code snippet.
+          </div>
+          <div className="font-bold text-xl">Download</div>
+          <div className="flex flex-row gap-3 mb-3">
+            <Button
               onClick={() => setIsPreviewToggle(true)}
+              colorScheme="blackAlpha"
+              variant={"outline"}
+              size="sm"
             >
-              Preview
-            </button>
-            <button
-              className="w-full text-center border-2 rounded-xl px-2"
+              <Tooltip label="Markdown preview">Preview</Tooltip>
+            </Button>
+            <Button
+              colorScheme="blackAlpha"
+              size="sm"
               onClick={() =>
                 saveMarkdownAsMD("output.md", ThreadList, filterStatus)
               }
             >
-              MD
-            </button>
-            <button
-              className="w-full text-center border-2 rounded-xl px-2"
+              <Tooltip label="Save as markdown (.md)">MD</Tooltip>
+            </Button>
+            <Button
+              colorScheme="blackAlpha"
+              size="sm"
               onClick={() =>
                 saveMarkdownAsRawText("output.txt", ThreadList, filterStatus)
               }
             >
-              TXT
-            </button>
+              <Tooltip label="Save as text (.txt)">TXT</Tooltip>
+            </Button>
+            {isPreviewToggle && (
+              <PreviewModal
+                markdownContent={mergeContent(ThreadList)}
+                setIsToggle={setIsPreviewToggle}
+                filterStatus={filterStatus}
+              />
+            )}
           </div>
-          {isPreviewToggle && (
-            <PreviewModal
-              markdownContent={mergeContent(ThreadList)}
-              setIsToggle={setIsPreviewToggle}
-              filterStatus={filterStatus}
-            />
-          )}
-        </div>
-      )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
+
 
 function DashboardThread({ ThreadList, setThreadList, triggerRefresh }) {
   const sensors = useSensors(

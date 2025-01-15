@@ -32,7 +32,7 @@ const NavLink = ({index, navigate}) => {
   )
 }
 
-export default function NarBar() {
+export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const navigate = useNavigate();
   return (
