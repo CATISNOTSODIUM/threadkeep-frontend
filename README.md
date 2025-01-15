@@ -19,7 +19,7 @@ This project aims to solve this problem by integrating a built-in data retrieval
 ## Tech Stack
 - **Programming Language**: TypeScript
 - **Third-party Libraries**: React, [dnd-kit](https://dndkit.com/) for drag and drop components,  [react-markdown-editor](https://uiwjs.github.io/react-markdown-editor/), `reduxjs/toolkit` for Redux development.
-- **Styling**: Tailwind CSS, Material UI
+- **Styling**: Tailwind CSS, Chakra UI
 
 Currently, Redux is only handling user authentication. The codebase will be expanded to use Redux more extensively when I have available time.
 
