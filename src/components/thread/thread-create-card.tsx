@@ -79,7 +79,7 @@ export default function ThreadCreateCard() {
     if (threadRequest.error) {
       setMessage(threadRequest.error);
     } else {
-      // window.location.reload();
+      window.location.reload();
     }
   };
 
