@@ -71,12 +71,15 @@ export default function ThreadCreateCard() {
       user,
       threadTitle,
       threadContent,
-      selectedTags.map((tag) => tagsDict[tag].id)
+      selectedTags.map((tag) => ({
+        "id": tagsDict[tag].id,
+        "name": tagsDict[tag].name
+      }))
     );
     if (threadRequest.error) {
       setMessage(threadRequest.error);
     } else {
-      window.location.reload();
+      // window.location.reload();
     }
   };
 

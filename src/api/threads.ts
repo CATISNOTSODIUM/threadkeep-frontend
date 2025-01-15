@@ -267,7 +267,6 @@ export async function createNewThread(
     content: string, 
     tags: Tag[]
 ): Promise<Optional<boolean>> {
-    
     try {
  
         const response = await fetch(`${HOST_API}/threads/create`, {

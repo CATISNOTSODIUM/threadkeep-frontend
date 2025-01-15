@@ -25,7 +25,7 @@ export default function CommentCard(props: Comment) {
         {user.name}
         {"  : "}
         <span className="font-bold">{time}</span>
-        {user?.name === currentUser.name && (
+        {user.name === currentUser.name && (
           <div className="flex gap-2">
             <CommentEditModal commentProps={props} />
             <Badge

@@ -110,15 +110,21 @@ export default function ThreadDisplay() {
 
                   <div className="text-3xl mb-4 font-bold">{title}</div>
                   <div className="flex flex-row text-base gap-2">
-                    <ThreadEditModal threadProps={thread} />
-                    <Badge
-                      colorScheme="red"
-                      variant={"outline"}
-                      className="cursor-pointer"
-                      onClick={handleDeleteThread}
-                    >
-                      <Tooltip label="Delete this thread">🗑 Delete</Tooltip>
-                    </Badge>
+                    {
+                      user?.name === currentUser.name &&
+                      (<span className="flex flex-row gap-2">
+                        <ThreadEditModal threadProps={thread} />
+                        <Badge
+                          colorScheme="red"
+                          variant={"outline"}
+                          className="cursor-pointer"
+                          onClick={handleDeleteThread}
+                        >
+                          <Tooltip label="Delete this thread">🗑 Delete</Tooltip>
+                        </Badge>
+                      </span>)
+                    }
+                      
                     {tags?.map((tag) => (
                       <Badge colorScheme="teal">{tag.name}</Badge>
                     ))}
