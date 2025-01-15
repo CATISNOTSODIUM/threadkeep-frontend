@@ -21,23 +21,13 @@ export default function CommentCard(props: Comment) {
   };
   return (
     <Card className="flex flex-col text-left bg-gray-50 hover:bg-gray-100 rounded-xl  my-3 py-5 px-6">
-      {isToggleEdit && (
-        <CommentEditModal commentProps={props} setIsToggle={setIsToggleEdit} />
-      )}
       <div className="text-xs">
         {user.name}
         {"  : "}
         <span className="font-bold">{time}</span>
         {user?.name === currentUser.name && (
           <div className="flex gap-2">
-            <Badge
-              colorScheme="yellow"
-              variant={"outline"}
-              className="cursor-pointer"
-              onClick={() => setIsToggleEdit(true)}
-            >
-              <Tooltip label="Edit this comment">✎ Edit </Tooltip>
-            </Badge>
+            <CommentEditModal commentProps={props} />
             <Badge
               colorScheme="red"
               variant={"outline"}

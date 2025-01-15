@@ -15,12 +15,19 @@ import { convertTimeToMessageHistory } from "../utils/message-history.ts";
 import MDEditor from "@uiw/react-md-editor";
 import CommentCard from "../components/comment/comment-card.tsx";
 import CommentsCreateCard from "../components/comment/comment-create-card.tsx";
-import ThreadDisplayCardSkeleton from "../components/thread/thread-display-card-skeleton.tsx";
 import ThreadEditModal from "../components/thread/thread-edit.tsx";
 import { isVerified } from "../utils/isVerified.ts";
 import { getUser } from "../utils/jwt.ts";
-import { Badge, Card, CardBody, CardHeader, Tooltip } from "@chakra-ui/react";
-
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  HStack,
+  Tooltip,
+} from "@chakra-ui/react";
+import Heart from "../assets/heart.tsx";
 
 export default function ThreadDisplay() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -73,6 +80,17 @@ export default function ThreadDisplay() {
     }
     navigate("/threads");
   };
+  const handleLike = async () => {
+    const threadID = searchParams.get("id");
+    if (threadID)
+      await reactionThread(
+        currentUser,
+        threadID,
+        !isToggleLike ? ReactionType.LIKE : ReactionType.UNLIKE
+      );
+    setCurrentLike(currentLike + (isToggleLike ? -1 : 1));
+    setIsToggleLike(!isToggleLike);
+  };
 
   return (
     <div>
@@ -82,47 +100,28 @@ export default function ThreadDisplay() {
         {thread && (
           <div className="flex flex-col lg:w-2/3 w-full lg:mx-48">
             <div className="flex flex-row content-center">
-              {isEditThread && (
-                <ThreadEditModal
-                  threadProps={thread}
-                  setIsToggle={setIsEditThread}
-                />
-              )}
-             
               <Card className="flex flex-col w-full">
-                <CardBody >
+                <CardBody>
                   <div className="text-base my-1">
                     {isEditable ? user?.name + " (You)" : user?.name}
                     {"  : "}
                     <span className="font-bold">{time}</span>
                   </div>
-                  <div className="text-3xl mb-4 font-bold">
-                    {title}
-                  </div>
+                  
+                  <div className="text-3xl mb-4 font-bold">{title}</div>
                   <div className="flex flex-row text-base gap-2">
-                      <Badge
-                        colorScheme="yellow"
-                        variant={"outline"}
-                        className="cursor-pointer"
-                        onClick={() => setIsEditThread(true)}
-                      >
-                        <Tooltip label='Edit this thread'>
-                          ✎ Edit{" "}
-                        </Tooltip>
-                      </Badge>
-                      <Badge
-                        colorScheme="red"
-                        variant={"outline"}
-                        className="cursor-pointer"
-                        onClick={handleDeleteThread}
-                      >
-                        <Tooltip label='Delete this thread'>
-                          🗑 Delete
-                        </Tooltip>
-                      </Badge>
-                      {tags?.map((tag) => (
-                          <Badge colorScheme="teal">{tag.name}</Badge>
-                      ))}
+                    <ThreadEditModal threadProps={thread} />
+                    <Badge
+                      colorScheme="red"
+                      variant={"outline"}
+                      className="cursor-pointer"
+                      onClick={handleDeleteThread}
+                    >
+                      <Tooltip label="Delete this thread">🗑 Delete</Tooltip>
+                    </Badge>
+                    {tags?.map((tag) => (
+                      <Badge colorScheme="teal">{tag.name}</Badge>
+                    ))}
                   </div>
                   <MDEditor.Markdown
                     className="w-full my-5 h-fit"
@@ -133,20 +132,26 @@ export default function ThreadDisplay() {
               </Card>
             </div>
             <Card data-color-mode="light" className="p-5 mt-5">
-              <div className="font-bold text-xl">COMMENTS</div>
+              <HStack>
+                <Button 
+                colorScheme={isToggleLike ? 'red' : 'blackAlpha'} className="my-2 hover:animate-pulse w-fit"
+                onClick={handleLike} 
+                variant={"outline"}
+                >
+                  {isToggleLike ? 'Liked' : 'Like'} <Heart className={"w-4 h-4 "}/>
+                </Button>
+                <CommentsCreateCard
+                  threadID={id ?? ""}
+                  fetchComments={fetchComments}
+                />
+              </HStack>
               {comments.length > 0 ? (
                 comments?.map((comment) => <CommentCard {...comment} />)
               ) : (
                 <div className="text-gray-500 text-sm py-3">No comments</div>
               )}
-              <CommentsCreateCard
-                threadID={id ?? ""}
-                fetchComments={fetchComments}
-              />
+              
             </Card>
-              
-
-              
           </div>
         )}
       </div>

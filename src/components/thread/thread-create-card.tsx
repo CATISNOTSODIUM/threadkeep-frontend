@@ -5,7 +5,19 @@ import { createNewThread } from "../../api/threads.ts";
 import MultipleSelectChip from "../common/multiple-select.tsx";
 import { tagList } from "../../api/tags.ts";
 import { getUser } from "../../utils/jwt.ts";
-import { Button, HStack, Input, InputGroup, InputLeftAddon, Modal, ModalContent, ModalOverlay, Tooltip, useDisclosure, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  Tooltip,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 
 interface TagDictType {
   label: string;
@@ -18,7 +30,7 @@ export default function ThreadCreateCard() {
   const [threadTitle, setThreadTitle] = React.useState("");
   const [threadContent, setThreadContent] = React.useState("");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
-  
+
   // message status
   const [message, setMessage] = React.useState(
     "At this stage, only image URLs are allowed."
@@ -31,11 +43,12 @@ export default function ThreadCreateCard() {
     }
     try {
       const tmp: TagDictType[] = [];
-      
+
       tagsRequest.data.forEach((tag) => {
         tmp.push({
-          label: tag.name, value: tag.name
-        })
+          label: tag.name,
+          value: tag.name,
+        });
         tmp[tag.name] = tag;
       });
       setTagsDict(tmp);
@@ -70,29 +83,36 @@ export default function ThreadCreateCard() {
   React.useEffect(() => {
     fetchTags();
   }, []);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <div >
+    <div>
       <Button onClick={onOpen} colorScheme="teal">
-        <Tooltip label='Create new thread' placement="right-end">
-                Create 🛠️
+        <Tooltip label="Create new thread" placement="right-end">
+          Create 🛠️
         </Tooltip>
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl" scrollBehavior="inside">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size="2xl"
+        scrollBehavior="inside"
+      >
         <ModalOverlay />
         <ModalContent className="p-10">
-            <div className="font-bold text-xl">Create new thread</div>
-            <div className="text-xs text-red-400">{message}</div>
-              <InputGroup className="py-2 max-w-96">
-                <InputLeftAddon>Title</InputLeftAddon>
-                <Input placeholder='Your title (Max character 100)' value={threadTitle} onChange={(e) => setThreadTitle(e.target.value)}/>
-              </InputGroup>
-              
-          <div className="flex flex-row">
+          <div className="font-bold text-xl">Create new thread</div>
+          <div className="text-xs text-red-400">{message}</div>
+          <InputGroup className="py-2 max-w-96">
+            <InputLeftAddon>Title</InputLeftAddon>
+            <Input
+              placeholder="Your title (Max character 100)"
+              value={threadTitle}
+              onChange={(e) => setThreadTitle(e.target.value)}
+            />
+          </InputGroup>
 
-            
-          </div>
+          <div className="flex flex-row"></div>
 
           <div data-color-mode="light">
             <MarkdownHandler
@@ -102,30 +122,23 @@ export default function ThreadCreateCard() {
           </div>
           <div className="my-5">
             <MultipleSelectChip
-                tagOptions={tagsDict}
-                setSelectedTags={setSelectedTags}
+              tagOptions={tagsDict}
+              setSelectedTags={setSelectedTags}
             />
           </div>
           <HStack>
-            
-          <Button
-            colorScheme="yellow"
-            className="w-fit"
-            onClick={onSubmit}
-          >
-            Start your discussion 🐝
-          </Button>
-          <Button
-            colorScheme="red"
-            variant={"outline"}
-            className="w-fit"
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
+            <Button colorScheme="yellow" className="w-fit" onClick={onSubmit}>
+              Start your discussion 🐝
+            </Button>
+            <Button
+              colorScheme="red"
+              variant={"outline"}
+              className="w-fit"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
           </HStack>
-          
-          
         </ModalContent>
       </Modal>
     </div>

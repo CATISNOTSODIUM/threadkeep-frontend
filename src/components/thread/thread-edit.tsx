@@ -4,12 +4,23 @@ import { Thread, User } from "../../models/index.ts";
 import MarkdownHandler from "../common/markdown-editor.tsx";
 import { updateThread } from "../../api/threads.ts";
 import { getUser } from "../../utils/jwt.ts";
+import {
+  Badge,
+  Button,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 
-export default function ThreadEditModal(props: {
-  threadProps: Thread;
-  setIsToggle: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const { threadProps, setIsToggle } = props;
+export default function ThreadEditModal(props: { threadProps: Thread }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { threadProps } = props;
   const { content, title, id } = threadProps;
   const [threadContent, setThreadContent] = React.useState(content);
   const [threadTitle, setThreadTitle] = React.useState(title);
@@ -28,35 +39,61 @@ export default function ThreadEditModal(props: {
       setMessage(threadRequest.error);
       return;
     }
-    setIsToggle(false);
+    onClose();
   };
   return (
-    <div
-      data-color-mode="light"
-      className="fixed top-1/6 left-1/6 w-2/3 min-h-1/2 h-fit  z-50 p-10 bg-white rounded-xl shadow-xl"
-    >
-      <div className="text-xl font-bold">Thread editor</div>
-      <div className="text-sm text-red-600">{message}</div>
-      <button
-        className="bg-yellow-200 font-bold text-black py-2 w-1/4 min-w-24 mr-2 my-2 rounded-full"
-        onClick={submitThread}
+    <div>
+      <Badge
+        colorScheme="yellow"
+        variant={"outline"}
+        className="cursor-pointer"
+        onClick={onOpen}
       >
-        Submit
-      </button>
-      <button
-        className="bg-yellow-100 font-bold text-black py-2 w-1/4 min-w-24 mr-2 my-2 rounded-full"
-        onClick={() => setIsToggle(false)}
+        <Tooltip label="Edit this thread">✎ Edit </Tooltip>
+      </Badge>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size="2xl"
+        scrollBehavior="inside"
       >
-        Cancel
-      </button>
-      <input
-        id="title"
-        value={threadTitle}
-        onChange={(e) => setThreadTitle(e.target.value)}
-        className="block p-2.5 my-1 w-full text-sm text-gray-700 bg-gray-50 rounded-lg border "
-        placeholder="Title"
-      ></input>
-      <MarkdownHandler content={threadContent} setContent={setThreadContent} />
+        <ModalOverlay />
+        <ModalContent className="p-10">
+          <div className="text-xl font-bold">Thread editor</div>
+          <div className="text-sm text-red-600">{message}</div>
+
+          <InputGroup className="py-2 max-w-96">
+            <InputLeftAddon>Title</InputLeftAddon>
+            <Input
+              placeholder="Your title (Max character 100)"
+              value={threadTitle}
+              onChange={(e) => setThreadTitle(e.target.value)}
+            />
+          </InputGroup>
+          <MarkdownHandler
+            content={threadContent}
+            setContent={setThreadContent}
+          />
+          <HStack className="mt-3">
+            <Button
+              colorScheme="yellow"
+              className="w-fit"
+              onClick={submitThread}
+            >
+              Update 🐝
+            </Button>
+            <Button
+              colorScheme="red"
+              variant={"outline"}
+              className="w-fit"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+          </HStack>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

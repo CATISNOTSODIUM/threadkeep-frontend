@@ -27,7 +27,7 @@ import {
   saveMarkdownAsRawText,
 } from "../../utils/save-markdown.ts";
 import PreviewModal from "./preview-modal.tsx";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { createSearchParams, redirect, useNavigate } from "react-router-dom";
 import { isVerified } from "../../utils/isVerified.ts";
 import { getUser, removeUser } from "../../utils/jwt.ts";
 import {
@@ -51,8 +51,6 @@ import {
 } from "@chakra-ui/react";
 
 export default function SideBar() {
-  const navigate = useNavigate();
-  if (!isVerified()) navigate("/signin");
   const currentUser = getUser();
   const name = currentUser.name;
   const userID = currentUser.id;
@@ -71,8 +69,9 @@ export default function SideBar() {
 
   const logOut = () => {
     removeUser();
-    navigate("/");
+    redirect("/");
   };
+
   React.useEffect(() => {
     fetchThread();
   }, []);
@@ -178,14 +177,11 @@ function Filter({ ThreadList }) {
           </div>
           <div className="font-bold text-xl">Download</div>
           <div className="flex flex-row gap-3 mb-3">
-            <Button
-              onClick={() => setIsPreviewToggle(true)}
-              colorScheme="blackAlpha"
-              variant={"outline"}
-              size="sm"
-            >
-              <Tooltip label="Markdown preview">Preview</Tooltip>
-            </Button>
+            <PreviewModal
+                markdownContent={mergeContent(ThreadList)}
+                setIsToggle={setIsPreviewToggle}
+                filterStatus={filterStatus}
+            />
             <Button
               colorScheme="blackAlpha"
               size="sm"
@@ -204,13 +200,6 @@ function Filter({ ThreadList }) {
             >
               <Tooltip label="Save as text (.txt)">TXT</Tooltip>
             </Button>
-            {isPreviewToggle && (
-              <PreviewModal
-                markdownContent={mergeContent(ThreadList)}
-                setIsToggle={setIsPreviewToggle}
-                filterStatus={filterStatus}
-              />
-            )}
           </div>
           </ModalBody>
         </ModalContent>

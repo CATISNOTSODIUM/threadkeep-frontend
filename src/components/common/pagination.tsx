@@ -11,8 +11,8 @@ export function Pagination({
   }
 
   return (
-    <div className="w-full flex mt-5 cotent-center justify-center">
-      <ul className="flex items-center -space-x-px h-8 text-sm">
+    <div className="w-full flex mt-5 cotent-center justify-center ">
+      <ul className="flex items-center -space-x-px h-8 text-sm list-none">
         {pageNumbers.map((pageNumber) => (
           <li>
             <button onClick={() => paginate(pageNumber)} key={pageNumber}>
