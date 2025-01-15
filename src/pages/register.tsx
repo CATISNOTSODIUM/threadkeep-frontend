@@ -17,7 +17,7 @@ export default function Register() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const handleRegister = async () => {
-    setMessage("");
+    setMessage("Pending ...")
     const userRequest = await createUser(username, password);
     if (userRequest.error) {
       setMessage(userRequest.error);
@@ -48,6 +48,9 @@ export default function Register() {
             placeholder="Password (Optional)"
           />
           <FormHelperText>Password is optional</FormHelperText>
+          <div className="text-red-500 max-w-64">
+              {message}
+          </div>
           <HStack className="mt-1">
               <Button className="w-full" colorScheme="teal" onClick={handleRegister}>
                 Submit

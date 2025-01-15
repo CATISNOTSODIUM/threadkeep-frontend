@@ -26,6 +26,7 @@ export default function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    setMessage("Pending ...")
     try {
       const name = username;
       if (name === "") {
@@ -72,6 +73,9 @@ export default function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password (Optional)"
           />
+          <div className="text-red-500 max-w-64">
+              {message}
+          </div>
           <FormHelperText>
             <div className="text-gray-600">
               Haven't registered? You can registered{" "}
@@ -84,6 +88,7 @@ export default function SignIn() {
               .
             </div>
           </FormHelperText>
+          
           <Button className="w-full my-5" colorScheme="teal"  onClick={handleSignIn}>
             Submit
           </Button>
