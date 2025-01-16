@@ -1,8 +1,8 @@
 import * as React from 'react';
 import NavBar from '../components/common/nav-bar.tsx';
-import GithubIcon from '../assets/github-icon.tsx';
+import ThreadCard from "../components/thread/thread-card.tsx";
+import ThreadCreateCard from "../components/thread/thread-create-card.tsx";
 import { getUser, removeUser } from '../utils/jwt.ts';
-import SideBar from '../components/common/side-bar.tsx';
 import {
   DndContext,
   closestCenter,
@@ -61,10 +61,12 @@ export default function Profile() {
           <div className="text-xs text-wrap" id="logo">
             {userID}
           </div>
-          <HStack className='my-3'>
-            <Button onClick={logOut} colorScheme="red" variant={"outline"}>
+          <Button onClick={logOut} colorScheme="red" variant={"outline"} className='my-1 w-fit'>
               Log out{" "}
             </Button>
+          <HStack className='my-1'>
+            
+            <ThreadCreateCard/>
             <Filter ThreadList={ThreadList}/>
           </HStack>
           <Card className='flex flex-col gap-2 p-3'>

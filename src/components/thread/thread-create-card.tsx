@@ -14,6 +14,7 @@ import {
   Modal,
   ModalContent,
   ModalOverlay,
+  StepTitle,
   Tooltip,
   useDisclosure,
   VStack,
@@ -106,13 +107,14 @@ export default function ThreadCreateCard() {
         <ModalContent className="p-10">
           <div className="font-bold text-xl">Create new thread</div>
           <div className="text-xs text-red-400">{message}</div>
-          <InputGroup className="py-2 max-w-96">
+          <InputGroup className="py-2">
             <InputLeftAddon>Title</InputLeftAddon>
             <Input
               placeholder="Your title (Max character 100)"
               value={threadTitle}
               onChange={(e) => setThreadTitle(e.target.value)}
             />
+            <UserGuideModal/>
           </InputGroup>
 
           <div className="flex flex-row"></div>
@@ -146,4 +148,40 @@ export default function ThreadCreateCard() {
       </Modal>
     </div>
   );
+}
+
+
+
+export function UserGuideModal() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+    <Button onClick={onOpen} colorScheme="teal" variant={"outline"} size="xl" className="px-2 ml-1">
+      <Tooltip label='Open user guide' placement="right-end">
+          Guide 📙
+      </Tooltip>
+    </Button>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl" scrollBehavior="inside">
+      <ModalOverlay />
+      <ModalContent className="p-10">
+        <div className="text-2xl font-bold">User guide: Create New Thread</div>
+        <p className="py-2">
+          <div className="text-red-600 font-bold">
+            It is mandatory to fill in both title and description in order to proceed.
+          </div>
+          <div><b>Title:</b> A concise and informative name for your thread</div>
+          <div><b>Description:</b>  A more detailed explanation of the topic or discussion you're starting. This provides context for other users. While the description text field is supported by markdown, LaTex has not yet been supported.</div>
+          <div><b>Optional Tags:</b> You can also add tags to your thread to categorize it and make it easier for others to find. Tags are optional, but they can be very helpful in organizing and discovering relevant discussions.</div>
+        </p>
+        
+    
+
+        <Button onClick={onClose} variant={"outline"} colorScheme="red" className="w-fit">
+          Close
+        </Button>
+        
+      </ModalContent>
+    </Modal>
+    </>
+  )
 }

@@ -25,9 +25,9 @@ export default function PreviewModal(props: {
         <Button onClick={onClose} variant={"outline"} colorScheme="red" className="w-fit">
           Close
         </Button>
-        <div data-color-mode="light">
+        <div data-color-mode="light" className="overflow-scroll ">
           <MDEditor.Markdown
-        className="w-full my-1 h-3/4 overflow-scroll py-2"
+        className="w-full my-1 h-3/4 py-2"
         source={filterContent(markdownContent, filterStatus)}
         style={{
           fontFamily: '"inter", sans-serif',
