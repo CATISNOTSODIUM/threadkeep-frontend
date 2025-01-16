@@ -57,7 +57,7 @@ export default function ThreadCard(props: Thread) {
             className="absolute -z-10 opacity-30 h-full"
           />
           <HStack>
-            <Heart />
+            <Heart className={""} />
             <span>{likes}</span>
             <View />
             <span>{views}</span>
@@ -77,7 +77,7 @@ export default function ThreadCard(props: Thread) {
           className={`w-full cursor-pointer hover:bg-gray-50 ${isSavedCurrent ? 'bg-yellow-50' : ''}`}
           onClick={onClick}
         >
-        <Text className="font-bold text-xl">{title}</Text>
+        <Text className="font-bold text-xl hover:underline">{title}</Text>
         <div className="text-xs my-1">
           {isEditable ? user.name + " (You)" : user.name}
           {"  : "}

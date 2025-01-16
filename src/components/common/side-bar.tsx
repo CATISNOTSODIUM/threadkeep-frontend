@@ -113,13 +113,18 @@ export default function SideBar() {
                 Log out{" "}
               </Button>
               <Button onClick={fetchThread} colorScheme="teal">
-                {"  Refresh ↻  "}
+                <Tooltip label="Click here to refresh after you have saved additional threads.">
+                  {"  Refresh ↻  "}
+                </Tooltip>
               </Button>
             </HStack>
           </Card>
         </DrawerHeader>
         <DrawerBody>
-          <Filter ThreadList={ThreadList} />
+          <HStack>
+            <Filter ThreadList={ThreadList} />
+            <UserGuideModal/>
+          </HStack>
           <Card className="mt-1 p-3" variant={"elevated"}>
             <CardHeader className="font-bold text-xl">
               Saved threads 💾
@@ -136,6 +141,40 @@ export default function SideBar() {
   );
 }
 
+function UserGuideModal() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+    <Button onClick={onOpen} colorScheme="teal" variant={"outline"} className="px-2 ">
+      <Tooltip label='Open user guide' placement="right-end">
+          Guide 📙
+      </Tooltip>
+    </Button>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior="inside">
+      <ModalOverlay />
+      <ModalContent className="p-10">
+        <div className="text-2xl font-bold">User guide: Downloading saved threads</div>
+        <p className="py-2">
+          By toggling the Download 💾 button, you can filter the type of information you want to retrieve. Currently, our application supports three filters: text, image, and code snippets.
+        </p>
+        <p className="py-2">
+          You can click "Preview" to check your filtered data before saving it to your device. You have the option to save the data as a markdown file (.md) or a text file (.txt).
+        </p>
+        <p className="py-2 text-gray-600 text-sm">
+          At this stage, our app only supports markdown and text.
+        </p>
+        <Button onClick={onClose} variant={"outline"} colorScheme="red" className="w-fit">
+          Close
+        </Button>
+        
+      </ModalContent>
+    </Modal>
+    </>
+  )
+}
+
+
+
 function Filter({ ThreadList }) {
   // checkbox
   const [filterStatus, setFilterStatus] = React.useState({
@@ -148,8 +187,11 @@ function Filter({ ThreadList }) {
   return (
     <div>
       <Button onClick={onOpen} colorScheme="blue">
-        💾 Download
+        <Tooltip label="Click here to download your saved threads">
+          💾 Download
+        </Tooltip>
       </Button>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

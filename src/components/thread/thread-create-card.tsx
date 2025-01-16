@@ -152,7 +152,7 @@ export default function ThreadCreateCard() {
 
 
 
-export function UserGuideModal() {
+function UserGuideModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
