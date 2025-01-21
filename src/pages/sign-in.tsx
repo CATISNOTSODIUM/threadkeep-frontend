@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/common/nav-bar.tsx";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/auth/authApiSlice.ts";
@@ -17,11 +17,10 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, ] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    setMessage("");
   }, [username, password]);
 
   const handleSignIn = async (e) => {
@@ -34,10 +33,14 @@ export default function SignIn() {
         return;
       }
       const userData = await login({ name, password }).unwrap();
-      dispatch(setCredentials({ ...userData.payload }));
+      const response = dispatch(setCredentials({ ...userData.payload }));
       setUsername("");
       setPassword("");
-      navigate("/threads");
+      if (!response.payload?.data) {
+        setMessage("Invalid username or password.");
+      } else {
+        navigate("/threads");
+      }
     } catch (error) {
       if (!error?.response) {
         setMessage("Cannot connect to server");
@@ -73,7 +76,7 @@ export default function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password (Optional)"
           />
-          <div className="text-red-500 max-w-64">
+          <div className="text-red-500 max-w-64 text-sm">
               {message}
           </div>
           <FormHelperText>

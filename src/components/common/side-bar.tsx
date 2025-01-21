@@ -28,10 +28,8 @@ import {
 } from "../../utils/save-markdown.ts";
 import PreviewModal from "./preview-modal.tsx";
 import { createSearchParams, redirect, useNavigate } from "react-router-dom";
-import { isVerified } from "../../utils/isVerified.ts";
 import { getUser, removeUser } from "../../utils/jwt.ts";
 import {
-  Badge,
   Button,
   Card,
   CardHeader,
@@ -77,14 +75,12 @@ export default function SideBar() {
   }, []);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef(undefined);
 
   if (!isOpen) {
     return (
       <button
         className="fixed opacity-50 hover:opacity-100 top-0 left-0 z-50 w-10 h-full text-center content-center bg-gray-200 drop-shadow-2xl"
         onClick={onOpen}
-        ref={btnRef}
       >
         <Tooltip label="Thread Manager 🔧" placement="right-end">
           {"⚙️ 🔧"}
@@ -97,7 +93,6 @@ export default function SideBar() {
       isOpen={isOpen}
       placement="left"
       onClose={onClose}
-      finalFocusRef={btnRef}
     >
       <DrawerOverlay />
       <DrawerContent>
@@ -183,7 +178,6 @@ function Filter({ ThreadList }) {
     code: true,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isPreviewToggle, setIsPreviewToggle] = React.useState(false);
   return (
     <div>
       <Button onClick={onOpen} colorScheme="blue">
@@ -201,6 +195,7 @@ function Filter({ ThreadList }) {
             {Object.entries(filterStatus).map(([name, status]) => {
               return (
                 <Button
+                  key={name}
                   colorScheme={status ? "yellow" : "blackAlpha"}
                   onClick={() => {
                     let tmpStatus = Object.assign({}, filterStatus);
@@ -221,7 +216,6 @@ function Filter({ ThreadList }) {
           <div className="flex flex-row gap-3 mb-3">
             <PreviewModal
                 markdownContent={mergeContent(ThreadList)}
-                setIsToggle={setIsPreviewToggle}
                 filterStatus={filterStatus}
             />
             <Button
@@ -287,7 +281,7 @@ function DashboardThread({ ThreadList, setThreadList, triggerRefresh }) {
         strategy={verticalListSortingStrategy}
       >
         {ThreadList.map((id) => (
-          <SortableItem key={id.id} id={id} triggerRefresh={triggerRefresh} />
+          <SortableItem key={id.threadID} id={id} triggerRefresh={triggerRefresh} />
         ))}
       </SortableContext>
     </DndContext>

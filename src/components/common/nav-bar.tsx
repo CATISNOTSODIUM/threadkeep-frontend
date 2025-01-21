@@ -8,7 +8,7 @@ import {
   useDisclosure,
   Stack,
 } from '@chakra-ui/react'
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
 
 const Links = ["Home", "Threads", "Profile"];
@@ -57,7 +57,7 @@ export default function NavBar() {
             </Box>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               {Links.map((_, index) => (
-                <NavLink index={index} navigate={navigate}/>
+                <NavLink index={index} navigate={navigate} key={index}/>
               ))}
             </HStack>
           </HStack>
@@ -68,7 +68,7 @@ export default function NavBar() {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
               {Links.map((_,index) => (
-                <NavLink index={index} navigate={navigate}/>
+                <NavLink index={index} navigate={navigate} key={index}/>
               ))}
             </Stack>
           </Box>

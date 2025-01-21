@@ -32,7 +32,7 @@ export default function CommentsCreateCard(props: {
     <div className="flex flex-col w-full text-left gap-2 duration-200">
       <Button
         colorScheme="yellow"
-        className="w-fit"
+        className="w-24"
         onClick={() => setIsToggle(!isToggle)}
       >
         Reply ✉️

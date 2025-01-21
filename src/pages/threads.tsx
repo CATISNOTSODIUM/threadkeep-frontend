@@ -2,16 +2,13 @@ import React from "react";
 import NavBar from "../components/common/nav-bar.tsx";
 import SideBar from "../components/common/side-bar.tsx";
 import ThreadCard from "../components/thread/thread-card.tsx";
-import ThreadCreateCard from "../components/thread/thread-create-card.tsx";
 import { countThread, threadList } from "../api/threads.ts";
 import { Thread } from "../models/index.ts";
 import { Pagination } from "../components/common/pagination.tsx";
-import { useNavigate } from "react-router-dom";
 import SearchFilterHandler from "../components/common/search-filter.tsx";
 import { getID } from "../utils/getReduxState.ts";
 
 export default function Threads() {
-  const navigate = useNavigate();
   const [ThreadList, setThreadList] = React.useState<Thread[]>([]);
   const [savedThreadIDList, setSavedThreadIDList] = React.useState<String[]>(
     []
@@ -61,14 +58,25 @@ export default function Threads() {
     setTotalThreads(countThreadRequest.data);
   };
 
+
+  const updateParams = async () => {
+    await fetchThread()
+    await initPagination()
+  }
   React.useEffect(
     () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      fetchThread()
-      initPagination()
-    }, [pageNumber, filter]
+      setPageNumber(1); // reset page number when apply filter
+      updateParams();
+    }, [filter]
   )
 
+  React.useEffect(
+    () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateParams();
+    }, [pageNumber]
+  )
   return (
     <div >
         <NavBar/>
@@ -78,6 +86,7 @@ export default function Threads() {
                 <div className='text-3xl font-bold'>All Threads</div>
                 <hr className='mt-2 mb-4'/>
                   <SearchFilterHandler setFilter={setFilter}/>
+                  <div className="text-red-500">{message}</div>
                   {
                     ThreadList ?
                     ThreadList

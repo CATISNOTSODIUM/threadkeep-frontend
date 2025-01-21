@@ -126,7 +126,7 @@ export default function ThreadDisplay() {
                     }
                       
                     {tags?.map((tag) => (
-                      <Badge colorScheme="teal">{tag.name}</Badge>
+                      <Badge colorScheme="teal" key={tag.name}>{tag.name}</Badge>
                     ))}
                   </div>
                   <div data-color-mode="light">
@@ -143,7 +143,7 @@ export default function ThreadDisplay() {
               <HStack>
                 <Button
                   colorScheme={isToggleLike ? "red" : "blackAlpha"}
-                  className="my-2 hover:animate-pulse w-fit"
+                  className="my-2 hover:animate-pulse w-24"
                   onClick={handleLike}
                   variant={"outline"}
                 >
@@ -157,7 +157,7 @@ export default function ThreadDisplay() {
                   fetchComments={fetchComments}
                 />
               {comments.length > 0 ? (
-                comments?.map((comment) => <CommentCard {...comment} />)
+                comments?.map((comment) => <CommentCard key={comment.id} {...comment} />)
               ) : (
                 <div className="text-gray-500 text-sm py-3">No comments</div>
               )}

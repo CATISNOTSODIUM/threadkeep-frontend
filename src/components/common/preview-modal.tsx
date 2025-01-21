@@ -7,10 +7,9 @@ import { Button, Modal, ModalContent, ModalOverlay, Tooltip, useDisclosure } fro
 
 export default function PreviewModal(props: {
   markdownContent: string;
-  setIsToggle: React.Dispatch<React.SetStateAction<boolean>>;
   filterStatus: any;
 }) {
-  const { markdownContent, setIsToggle, filterStatus } = props;
+  const { markdownContent, filterStatus } = props;
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>

@@ -86,7 +86,7 @@ export default function ThreadCard(props: Thread) {
         <Stack direction="row">
           {isEditable && <Badge className="text-xs" colorScheme="red">Editable ✎</Badge>}
           {tags.map((tag) => (
-            <Badge colorScheme="teal">{tag.name}</Badge>
+            <Badge colorScheme="teal" key={tag.name}>{tag.name}</Badge>
           ))}
         </Stack>
         <Text py="2">{truncatedContent}</Text>
