@@ -107,8 +107,12 @@ This error occurs when frontend cannot fetch data from the backend. This is due 
 - **Database server is down**: please check your database according to your `DATABASE_URL`.
 
 # Acknowledgement
-First of all, thank you for this CVWO winter assignment. It has helped me learn essential programming concepts and become familiar with web development frameworks step by step throughout the guide
+First and foremost, I would like to extend my sincere thanks to the CVWO committee who offers the invaluable opportunity to embrace myself through web development frameworks within two months. It has helped me learn essential programming concepts and become familiar with web development frameworks step by step throughout the guide. To be honest, grinding through this assignment was initially daunting and mind-blocking. Those can be surpassed by the excitement to grasp new concepts from practical experience.
 
-To be honest, grinding through this assignment without prior knowledge of Go, Docker, and SQL was initially daunting and mind-blocking. However, in the end, I finally did it! Thank you to all YouTube tutorial creators such as Net Ninja, Fireship, and Web Dev Simplified who provided guidance throughout this assignment. Also, thank you to the DataCamp SQL course for helping me grasp the basic ideas of working with SQL.
+In the end, it’s actually worth it! ♥ Phew 😅 
 
-I would like to express special thanks to one of my year 3 CS seniors who recommended this program, and also to the NUS School of Computing for offering this opportunity. This winter break would not have been as interesting if this assignment had not existed. Even though I might not get selected for the next round, I will not be disappointed.
+Nonetheless, I would like to acknowledge the assistance of all online tutorials such as Net Ninja, Fireship, and Web Dev Simplified who provided helpful tutorials throughout this assignment. Also, thank you to the DataCamp course for helping me grasp the basic ideas of working with SQL. Special thanks to Stack Overflow for giving me ingenious suggestions on writing good-practice code. 
+Finally, I would like to express special thanks to all of the CS seniors who recommended this program for relentlessly giving support and helpful advice. Also, special thanks to NUS School of Computing for offering this opportunity and keeping me busy during the winter break. This break would not have been as interesting without this assignment.
+
+# License
+This project is licensed under the [MIT License](LICENSE).
