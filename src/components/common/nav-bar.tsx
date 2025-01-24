@@ -11,8 +11,8 @@ import {
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
 
-const Links = ["Home", "Threads", "Profile"];
-const Urls = ["/", "/threads", "/profile"];
+const Links = ["Home", "Threads", "Profile", "About"];
+const Urls = ["/", "/threads", "/profile", "/about"];
 const NavLink = ({index, navigate}) => {
   return (
     <Box
