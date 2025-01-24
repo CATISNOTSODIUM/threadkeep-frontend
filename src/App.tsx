@@ -8,6 +8,7 @@ import SignIn from './pages/sign-in.tsx';
 import Profile from './pages/profile.tsx';
 import Register from './pages/register.tsx';
 import RequireAuth from './components/authentication/require-auth.tsx';
+import About from './pages/about.tsx';
 
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
       {/* Public routes */}
       <Route path="/" element={<Outlet />}> 
         <Route index element={<Home/>}></Route>
+        <Route path="/about" element={<About />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
         {/* Protected routes */}
