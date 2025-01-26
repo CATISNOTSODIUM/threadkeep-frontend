@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentjwtToken } from "../../redux/auth/authSlice.ts";
+import { selectCurrentjwtToken } from "../../feature/auth/authSlice.ts";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export default function RequireAuth() {

@@ -8,15 +8,13 @@ export default function About() {
   return (
     <div className="text-white bg-gradient-to-bl from-black to-gray-900 flex flex-col min-h-screen justify-center px-16 lg:px-64 border-none overflow-scroll">
       <NavBar />
-      <div className="text-4xl lg:text-4xl text-wrap" id="logo">
+      <div className="text-4xl lg:text-6xl my-3 text-wrap" id="logo">
         ThreadKeep ⬢{" "}
       </div>
-      <div className="text-xl text-wrap" id="logo">
-        Kosolpattanadurong Thitiwat (@CATISNOTSODIUM)
-      </div>
-      <HStack>
-        <Button variant={"solid"} colorScheme="yellow">
-          <a href="https://github.com/CATISNOTSODIUM">My github</a>
+
+      <HStack className="my-2">
+        <Button variant={"outline"} colorScheme="yellow">
+          <a href="https://catisnotsodium.vercel.app/">About me 🐱</a>
         </Button>
         <Button variant={"solid"} colorScheme="yellow">
           <a href="https://github.com/CATISNOTSODIUM/threadkeep-frontend">
@@ -29,7 +27,11 @@ export default function About() {
           </a>
         </Button>
       </HStack>
-      <div className="text-sm md:text-base p-3 overflow-scroll">
+        <div className="text-xl font-bold mb-3">
+        {" "}
+        This project was built for CVWO Winter Assignment
+      </div>
+      <div className="text-xs md:text-base overflow-scroll">
         <p>
         First and foremost, I would like to extend my sincere thanks to the CVWO
         committee who offers the invaluable opportunity to embrace myself

@@ -68,15 +68,15 @@ export default function Threads() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setPageNumber(1); // reset page number when apply filter
       updateParams();
-    }, [filter]
-  )
+    }, [filter] // eslint-disable-line react-hooks/exhaustive-deps
+  ) 
 
   React.useEffect(
     () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       updateParams();
-    }, [pageNumber]
-  )
+    }, [pageNumber] // eslint-disable-line react-hooks/exhaustive-deps
+  ) 
   return (
     <div >
         <NavBar/>

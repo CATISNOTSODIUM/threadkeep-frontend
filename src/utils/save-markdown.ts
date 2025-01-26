@@ -1,5 +1,4 @@
 import { Thread } from "../models";
-import {marked} from "marked";
 
 export const saveMarkdownAsRawText = (fileName, ThreadList: Thread[], filterStatus={
       "text": true,
@@ -31,7 +30,7 @@ export const filterContent = (content, filterStatus) => {
 
     // convert every code snippet into <code>
     if (convertCode) {
-        const codeSnippetRegex = /```([\s\S]*?)```/g;
+        const codeSnippetRegex = /```([\s\S]*?)```/g; //eslint-disable-line
         content = content.replace(codeSnippetRegex, (_, content) => {
             return " [code] ";
         });
@@ -39,12 +38,12 @@ export const filterContent = (content, filterStatus) => {
     
     // convert every image into <img>
     if (convertImage) {
-      const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g;
+      const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g; //eslint-disable-line
       content = content.replace(imageRegex, '  [img] ')
     }
     
     if (removeText) {
-      const specialRegex = /```([\s\S]*?)```|!\[([^\]]+)\]\(([^\)]+)\)/g;
+      const specialRegex = /```([\s\S]*?)```|!\[([^\]]+)\]\(([^\)]+)\)/g; //eslint-disable-line
       content = content.match(specialRegex)
       if (content !== null) content = content.join('\n')
     }

@@ -11,7 +11,6 @@ export default function CommentCard(props: Comment) {
   const { content, id, user, createdAt } = props;
   const time = convertTimeToMessageHistory(createdAt);
   const currentUser: User = getUser();
-  const [isToggleEdit, setIsToggleEdit] = React.useState(false);
   const handleCommentDelete = async () => {
     const commentRequest = await deleteComment(id, currentUser);
     if (commentRequest.error) {

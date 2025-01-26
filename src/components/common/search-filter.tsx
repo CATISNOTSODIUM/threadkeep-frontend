@@ -1,8 +1,7 @@
 import React from "react";
 import MultipleSelectChip from "./multiple-select.tsx";
-import { Tag } from "../../models/index.ts";
 import { tagList } from "../../api/tags.ts";
-import { InputGroup, Input, InputLeftAddon, HStack, Box } from "@chakra-ui/react"
+import { InputGroup, Input, InputLeftAddon} from "@chakra-ui/react"
 import ThreadCreateCard from "../thread/thread-create-card.tsx";
 
 
@@ -44,11 +43,11 @@ export default function SearchFilterHandler({ setFilter }) {
 
   React.useEffect(() => {
     onSubmitHandler();
-  }, [selectedTags, name]);
+  }, [selectedTags, name]);  // eslint-disable-line react-hooks/exhaustive-deps
   
   React.useEffect(() => {
     fetchTags();
-  }, []);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div className="flex gap-2 flex-col md:flex-row content-center my-2">
       <ThreadCreateCard/>

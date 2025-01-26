@@ -1,6 +1,5 @@
 import * as React from 'react';
 import NavBar from '../components/common/nav-bar.tsx';
-import ThreadCard from "../components/thread/thread-card.tsx";
 import ThreadCreateCard from "../components/thread/thread-create-card.tsx";
 import { getUser, removeUser } from '../utils/jwt.ts';
 import {
@@ -51,11 +50,11 @@ export default function Profile() {
   };
   React.useEffect(() => {
       fetchThread();
-  }, []);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div className="text-white bg-gradient-to-bl from-black to-gray-900 flex flex-col min-h-screen justify-center px-16 lg:px-64 border-none">
           <NavBar />
-          <div className="text-4xl lg:text-6xl my-3 text-wrap" id="logo">
+          <div className="text-2xl lg:text-6xl my-3 text-wrap" id="logo">
             {name}
           </div>
           <div className="text-xs text-wrap" id="logo">
@@ -71,7 +70,7 @@ export default function Profile() {
           </HStack>
           <Card className='flex flex-col gap-2 p-3'>
             <div className='text-gray-500 text-sm'>
-              Saved threads
+              Saved threads (You can drag the cards to swap positions)
             </div>
             <DashboardThread
               ThreadList={ThreadList}
@@ -92,7 +91,6 @@ function Filter({ ThreadList }) {
     code: true,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isPreviewToggle, setIsPreviewToggle] = React.useState(false);
   return (
     <div>
       <Button onClick={onOpen} colorScheme="blue">
@@ -127,7 +125,6 @@ function Filter({ ThreadList }) {
           <div className="flex flex-row gap-3 mb-3">
             <PreviewModal
                 markdownContent={mergeContent(ThreadList)}
-                setIsToggle={setIsPreviewToggle}
                 filterStatus={filterStatus}
             />
             <Button

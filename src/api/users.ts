@@ -2,11 +2,6 @@ import { defaultUser, User } from "../models/index.ts";
 import { Optional } from "./types"
 
 const HOST_API = process.env.REACT_APP_BACKEND_API
-
-/* 
-    /users is public (no JWT token required)
-*/
-
 export async function verifyUser(
     username: string,
     password: string

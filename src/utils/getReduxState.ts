@@ -1,4 +1,4 @@
-import { store } from "../redux/store.ts"
+import { store } from "../feature/store.ts"
 
 
 export function getJWTToken() {

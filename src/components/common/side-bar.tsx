@@ -72,7 +72,7 @@ export default function SideBar() {
 
   React.useEffect(() => {
     fetchThread();
-  }, []);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

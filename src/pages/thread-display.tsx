@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import NavBar from "../components/common/nav-bar.tsx";
 import SideBar from "../components/common/side-bar.tsx";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -16,26 +16,24 @@ import MDEditor from "@uiw/react-md-editor";
 import CommentCard from "../components/comment/comment-card.tsx";
 import CommentsCreateCard from "../components/comment/comment-create-card.tsx";
 import ThreadEditModal from "../components/thread/thread-edit.tsx";
-import { isVerified } from "../utils/isVerified.ts";
 import { getUser } from "../utils/jwt.ts";
 import {
   Badge,
   Button,
   Card,
   CardBody,
-  CardHeader,
   HStack,
   Tooltip,
 } from "@chakra-ui/react";
 import Heart from "../assets/heart.tsx";
 
 export default function ThreadDisplay() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _setSearchParams] = useSearchParams(); //eslint-disable-line
   const [thread, setThread] = React.useState<Thread>();
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [currentLike, setCurrentLike] = React.useState(0);
   const [isToggleLike, setIsToggleLike] = React.useState(false);
-  const [isEditThread, setIsEditThread] = React.useState(false);
+  const [isEditThread, _setIsEditThread] = React.useState(false); //eslint-disable-line
   const currentUser: User = getUser();
   const navigate = useNavigate();
   const fetchThread = async () => {
@@ -65,7 +63,7 @@ export default function ThreadDisplay() {
     fetchComments();
     const threadID = searchParams.get("id");
     if (threadID) reactionThread(currentUser, threadID, ReactionType.VIEW);
-  }, [isEditThread]);
+  }, [isEditThread]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const { title, content, id, user, tags, createdAt } = thread ?? {};
   const time = convertTimeToMessageHistory(createdAt);

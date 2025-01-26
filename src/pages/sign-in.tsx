@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/common/nav-bar.tsx";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../redux/auth/authApiSlice.ts";
+import { useLoginMutation } from "../feature/auth/authApiSlice.ts";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../redux/auth/authSlice.ts";
+import { setCredentials } from "../feature/auth/authSlice.ts";
 import {
   Button,
   FormControl,

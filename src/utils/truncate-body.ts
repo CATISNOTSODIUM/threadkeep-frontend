@@ -5,19 +5,19 @@ export const truncateBody = (
 ) => {
   if (!content) return content; // undefined content
   // replace markdown headers
-  const markdownHeaderRegex = /^(#{1,6})\s*(.+?)$/gm;
+  const markdownHeaderRegex = /^(#{1,6})\s*(.+?)$/gm; //eslint-disable-line
   content = content.replace(markdownHeaderRegex, "$2 >");
 
   // convert every code snippet into <code>
   if (convertCode) {
-    const codeSnippetRegex = /```([\s\S]*?)```/g;
+    const codeSnippetRegex = /```([\s\S]*?)```/g; //eslint-disable-line
     content = content.replace(codeSnippetRegex, (_, content) => {
       return " <code> ";
     });
   }
 
   // convert every image into <img>
-  const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g;
+  const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g; //eslint-disable-line
   content = content.replace(imageRegex, " <img> ");
   // limit character numbers
 
@@ -36,9 +36,9 @@ function extractUrlFromMDImage(text: string): string[] {
   // Regular expressions for different URL patterns
   const patterns = {
     // Matches markdown image syntax: ![alt](url)
-    markdownImage: /!\[.*?\]\((.*?)\)/,
+    markdownImage: /!\[.*?\]\((.*?)\)/, //eslint-disable-line
     // Matches plain URLs
-    plainUrl: /(https?:\/\/[^\s,]+)/g
+    plainUrl: /(https?:\/\/[^\s,]+)/g //eslint-disable-line
   };
 
   const urls = new Set<string>();
@@ -59,7 +59,7 @@ function extractUrlFromMDImage(text: string): string[] {
 }
 
 export function extractFirstImageUrl(content: string): string  {
-  const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g;
+  const imageRegex = /!\[([^\]]+)\]\(([^\)]+)\)/g; //eslint-disable-line
   const allImages = [...content.matchAll(imageRegex)];
   if (allImages.length === 0) {
     return '';

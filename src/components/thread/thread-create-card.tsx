@@ -1,6 +1,6 @@
 import * as React from "react";
 import MarkdownHandler from "../common/markdown-editor.tsx";
-import { Tag, User } from "../../models/index.ts";
+import { User } from "../../models/index.ts";
 import { createNewThread } from "../../api/threads.ts";
 import MultipleSelectChip from "../common/multiple-select.tsx";
 import { tagList } from "../../api/tags.ts";
@@ -14,10 +14,8 @@ import {
   Modal,
   ModalContent,
   ModalOverlay,
-  StepTitle,
   Tooltip,
-  useDisclosure,
-  VStack,
+  useDisclosure
 } from "@chakra-ui/react";
 
 interface TagDictType {

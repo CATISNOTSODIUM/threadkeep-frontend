@@ -11,7 +11,7 @@ import { Badge, Button, HStack, Modal, ModalContent, ModalOverlay, Tooltip, useD
 export default function CommentEditModal(props: { commentProps: Comment; }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { commentProps } = props;
-  const { content, id, user, likes, views, createdAt } = commentProps;
+  const { content, id } = commentProps;
   const [commentsContent, setCommentsContent] = React.useState(content);
   const currentUser: User = getUser();
   const submitComment = async () => {
